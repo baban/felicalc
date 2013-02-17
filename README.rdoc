@@ -1,0 +1,82 @@
+== jp_ fullstack について
+
+jp_fullstackはrailsを拡張して
+日本の環境で一般的なwebアプリケーションを高速で作成するために作られた
+ひな形です
+
+1. ユーザー登録
+2. 基本的な管理画面と統計機能
+
+== 構築手順
+
+=== CentOS環境での構築手順 
+
+環境は
+
+CentOS release 5.8 (Final)
+
+selinuxとFirewallのオフで行なっています
+
+yum -y update
+
+現在の環境のチェック
+
+cat /etc/redhat-release
+#CentOS release 5.8 (Final)
+/usr/sbin/httpd -v
+# /usr/sbin/httpd -v
+mysql --version
+# mysql  Ver 14.12 Distrib 5.0.95, for redhat-linux-gnu (i686) using readline 5.1
+php -v
+# Zend Engine v2.1.0, Copyright (c) 1998-2006 Zend Technologies
+
+==== ユーザーの作成
+
+rootでログイン
+
+adduser rails_user
+passwd rails_user
+
+
+visudoで設定ファイルを開いて、92行目のコメントアウトを外す
+
+visudo
+
+
+## Same thing without a password
+%wheel  ALL=(ALL)       NOPASSWD: ALL
+
+
+vi /etc/group
+
+
+11行目のグループ設定に自分のユーザー名前を追加
+
+wheel:x:10:root,rails_user
+
+
+いらないサービスを停止
+
+chkconfig atd off
+chkconfig bluetooth off
+chkconfig cpuspeed off
+chkconfig cups off
+chkconfig smartd off
+yum -y remove cpuspeed smartd bluetooth
+
+
+ここから外部のrpm のとり込み設定
+
+yum環境を構築
+
+pwd # /rootにいるか確認
+mkdir rpm
+cd rpm/
+
+===== Dagリポジトリ追加
+
+
+
+== チュートリアル
+
+
