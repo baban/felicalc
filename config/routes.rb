@@ -50,6 +50,18 @@ JpFullstack::Application.routes.draw do
   # just remember to delete public/index.html.
   # root :to => 'welcome#index'
 
+  get "users/registrated"
+
+  match "/auth/:provider/callback" => "sessions#callback"
+  match "/logout" => "sessions#destroy", :as => :logout
+
+  root to:"top#index"
+  devise_for :user
+  get "top/index", as:'user_root'
+
+  resource(:profile){ collection { get :delete_confirm } }
+  resources(:mypage, only:[:index]) {}
+
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
