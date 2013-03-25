@@ -1,19 +1,63 @@
 == jp_ fullstack について
 
 jp_fullstackはrailsを拡張して
-日本の環境で一般的なwebアプリケーションを高速で作成するために作られた
-ひな形です
+rails標準での搭載はされていないものの日本の環境で”普通これは使うだろう”と思われる
+一般的なwebアプリケーションを高速で作成するために作られた
+作成のひな形です
 
-1. ユーザー登録
-2. 基本的な管理画面と統計機能
+主にハッカソンなどで、本当に作りたいサービス部分だけを作って
+その他の事に関する準備や検証などを出来るだけ省略して行えるようにするために作成しました　
+
+こちら側で標準で準備している機構は以下のものです
+1. ユーザー登録機能とその画面(device仕様)
+2. facebook、twitter、google+ でのユーザー登録機能とその手順
+3. 基本的な管理画面と統計機能(typus仕様)
+
+と、それらの機能をミス無く構築できるようにするための手順書です
+これにさらに自動構築スクリプトがあれば最高なのですが、まだ準備できていません
+
+== 目次
+
+- 構築
+- 仮想マシンの準備
+- OSのインストール
+- ruby実行環境のインストール
+- railsのインストール
+- jp_fullstackの準備
+- facebook,twitter連携機能の作成 
 
 == 構築手順
 
-=== CentOS環境での構築手順 
+=== 仮想マシンの準備
+
+railsはrubyで実行できるため、windows,mac,linux環境それぞれで動きますが
+経験論として、windows環境上での直接のrails開発はオススメ出来ません
+理由はいくつかありますが、一言でまとめると”その方が後で困らない”からです
+とはいえ、windows環境がデスクトップというのが世の中でも大半なので
+windows環境の方は仮想マシンでlinux環境を構築して、そこにrailsをインストール
+ファイルへの管理はsambaをインストールしてそこから経由することで
+出来るだけコマンドを打たないで日常の開発ができるようにします
+
+=== OSの準備
+
+LinuxにはRedHat系とDebian系と言われる２つの系列があります
+それぞれ基本的なファイル操作などのコマンドは同じですが
+パッケージのインストールのコマンドやセキュリティ系のパッケージ等
+でそれぞれ違いがあります
+
+現実的な選択肢は、RedHat系ではCentOS
+Debian系ではUbuntuが一番シェアがあるでしょう
+現場では、CentOSが実際の業務でも一番良く使われているので
+基本これを柱として解説をしていきます
+
+==== CentOSのインストール
+
+
+==== CentOS環境での構築手順 
 
 環境は
 
-CentOS release 5.8 (Final)
+CentOS release 6.4 (Final)
 
 selinuxとFirewallのオフで行なっています
 
@@ -37,15 +81,12 @@ rootでログイン
 adduser rails_user
 passwd rails_user
 
-
 visudoで設定ファイルを開いて、92行目のコメントアウトを外す
 
 visudo
 
-
 ## Same thing without a password
 %wheel  ALL=(ALL)       NOPASSWD: ALL
-
 
 vi /etc/group
 
@@ -64,7 +105,6 @@ chkconfig cups off
 chkconfig smartd off
 yum -y remove cpuspeed smartd bluetooth
 
-
 ここから外部のrpm のとり込み設定
 
 yum環境を構築
@@ -75,7 +115,13 @@ cd rpm/
 
 ===== Dagリポジトリ追加
 
+=== ruby実行環境のインストール
+=== railsのインストール 
 
+=== jp_fullstackの準備
+=== Sambaの設定
+
+=== Passengerの設定
 
 == チュートリアル
 
