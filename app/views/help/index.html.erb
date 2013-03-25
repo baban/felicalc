@@ -1,0 +1,72 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
+  
+  <title><%= SERVICE_NAME %>: Help</title>
+  
+  <%= stylesheet_link_tag "account_books", :media =>:all %>
+  <%= stylesheet_link_tag "help", :media =>:all %>
+</head>
+<body>
+
+<div id="header">
+  <div id="login-bar">
+    <p>
+      User : <% if logged_in? %><%= current_user.login %><% end %>
+      <%= link_to 'ログアウト', logout_path %>
+      <%= link_to 'ヘルプ', :controller=>:help %>
+    </p>
+  </div>
+  
+  <h1><span>Felicalc</span></h1>
+  
+  <dl id="menu">
+    <dt id="account_books-page"><a href="<%= account_books_path %>">帳簿</a></dt>
+    <dt id="statistic-page"><a href="<%= account_statistics_path %>">統計</a></dt>
+  </dl>
+</div>
+
+<h1><span>Help</span></h1>
+
+<div id="content" class="section">
+
+<h2><span>使い方</span></h2>
+
+<div class="section">
+	<p>ExcelとAccessの機能の良さそうなほうを取り込んで作った感じです。</p>
+	<p>とりあえず入力しやすさに関しては気を使ったつもりです。</p>
+	
+	<table>
+		<tr><td>F2</td><td>選択セルの編集</td></tr>
+		<tr><td>PageUp</td><td>20行上に移動</td></tr>
+		<tr><td>PageDown</td><td>20行下に移動</td></tr>
+		<tr><td>Shift+上下左右</td><td>セルの範囲選択</td></tr>
+		<tr><td>Ctrl+セル選択</td><td>複数セルの選択</td></tr>
+		<tr><td>Ctrl+C</td><td>選択範囲のセルの値をコピー</td></tr>
+		<tr><td>Ctrl+V</td><td>範囲選択したセルの値をペースト</td></tr>
+	</table>
+</div>
+
+<h2><span>サポート</span></h2>
+
+<div class="section">
+	<ul class="data" id="service-responsibility">
+		<li>このサイトは、個人の趣味でなんとなく運営されています</li>
+		<li>個人情報に関してはWebサービスとして、保護はかけていますが責任までは取れませんので重要すぎるデータは入れないことを推奨します</li>
+		<li>突然サイトがなくなったりはしないはずですが、一応定期的な登録情報のバックアップを推奨しています</li>
+		<li>バグなどのサポートは<%= link_to "#{SITE_ADMIN_EMAIL}", "mailto:#{SITE_ADMIN_EMAIL}" %>までよろしくお願いいたします</li>
+	</ul>
+</div>
+
+<h2><span>謝辞</span></h2>
+
+<div class="section">
+	<p>このサービスは<a href="http://www.enjoyxstudy.com/javascript/suggest/">Suggest.js</a>ライブラリををお借りしています</p>
+</div>
+
+</div>
+
+</body>
+</html>
+

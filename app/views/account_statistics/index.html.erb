@@ -1,0 +1,58 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
+  
+  <title><%= SERVICE_NAME %>: 統計</title>
+  <%= stylesheet_link_tag "account_books", :media =>:all %>
+  <%= stylesheet_link_tag "account_statistics", :media =>:all %>
+  <%= javascript_include_tag "FusionCharts" %>
+</head>
+<body>
+
+<div id="header">
+  <div id="login-bar">
+    <p>
+      ユーザー名 : <% if logged_in? %><%= @u.login %><% end %>
+      <%= link_to 'ログアウト', logout_path %>
+      <%= link_to 'ヘルプ', :controller=>:help %>
+    </p>
+  </div>
+  
+  <h1><span>Felicalc</span></h1>
+  
+  <dl id="menu">
+    <dt id="account_books-page"><%= link_to '帳簿', account_books_path %></dt>
+    <dt id="statistic-page">
+      <a id="statistic-link" href="<%= %Q[#{account_statistics_path}/index/#{@start_date.at_beginning_of_month.strftime('%Y%m%d')}-#{@end_date.at_end_of_month.strftime('%Y%m%d')}] %>/">統計</a>
+    </dt>
+    <!-- <dt id="property-page">設定</dt> -->
+  </dl>
+</div>
+
+<h1><%= @start_date.strftime("%Y/%m/%d") %> ～ <%= @end_date.strftime("%Y/%m/%d") %>の集計</h1>
+
+<div id="content" class="section">
+
+<div id="statistic-circle-figure" class="figure">
+
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="800" height="400" id="circle-figure-object" >
+  <param name="movie" value="<%= root_path %>swf/FCF_Pie2D.swf?chartWidth=600&chartHeight=300" />
+  <param name="FlashVars" value="&dataXML=<%= statistic_formatter(@xml_data) %>" />
+  <param name="quality" value="high" />
+  <embed src="<%= root_path %>swf/FCF_Pie2D.swf?chartWidth=600&chartHeight=300" flashVars="&dataXML=<%= statistic_formatter(@xml_data) %>" quality="high" width="600" height="500" name="Column3D" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+</object>
+
+</div><%# div:chartdiv %>
+
+<div id="statstic-description">
+
+<h2>収支内訳</h2>
+<%= statistic_table( @xml_data ) %>
+
+</div>
+
+<br />
+
+</body>
+</html>

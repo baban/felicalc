@@ -1,0 +1,371 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
+  
+  <title><%= SERVICE_NAME %>: 家計簿</title>
+  <%= stylesheet_link_tag "account_books", :media =>"all" %>
+  <%= javascript_include_tag "prototype" %>
+  <%= javascript_include_tag "progressbar" %>
+  <%= javascript_include_tag "coaccess" %>
+  <%= javascript_include_tag "date_format" %>
+  <%= javascript_include_tag "suggest" %>
+</head>
+<body>
+
+<div id="header">
+  <div id="login-bar">
+    <p>
+      ユーザー名 : <% if logged_in? %><%= @u.login %><% end %>
+      <%= link_to 'ログアウト', logout_path %>
+      <%= link_to 'ヘルプ', :controller=>:help %>
+    </p>
+  </div>
+  
+  <h1><span>Felicalc</span></h1>
+  
+  <dl id="menu">
+    <dt class="menu-item">
+      <dl class="menu-item">
+        <dt class="menu-item">エクスポート</dt>
+        <dd class="menu-item">
+          <dl class="menu-item">
+            <dt id="export-ofx"><a id="export-ofx-link" href="<%= %Q[#{account_books_path}/export/#{(DateTime.now).at_beginning_of_month.strftime('%Y%m%d')}-#{(DateTime.now).at_end_of_month.strftime('%Y%m%d')}.ofx] %>">Microsft Money 形式(ofx)</a></dt>
+            <dt id="export-xsl"><a id="export-xsl-link" href="<%= %Q[#{account_books_path}/export/#{(DateTime.now).at_beginning_of_month.strftime('%Y%m%d')}-#{(DateTime.now).at_end_of_month.strftime('%Y%m%d')}.xls] %>">Excel 2000形式(xls)</a></dt>
+            <dt id="export-csv"><a id="export-csv-link" href="<%= %Q[#{account_books_path}/export/#{(DateTime.now).at_beginning_of_month.strftime('%Y%m%d')}-#{(DateTime.now).at_end_of_month.strftime('%Y%m%d')}.csv] %>">カンマ区切りcsv(csv)</a></dt>
+          </dl>
+        </dd>
+      </dl>
+    </dt>
+    <dt class="menu-item" id="statistic-page">
+      <a id="statistic-link" href="<%= %Q[#{account_statistics_path}/index/#{(DateTime.now).at_beginning_of_month.strftime('%Y%m%d')}-#{(DateTime.now).at_end_of_month.strftime('%Y%m%d')}] %>/">統計</a>
+    </dt>
+    
+    <!-- <dt id="property-page">設定</dt> -->
+  </dl>
+</div>
+
+<div id="content" class="section">
+
+<div id="trouble-logs-form" class="excel" action="">
+  <input type="button" value="←先月" id="get-prev-data" />
+  <input type="button" value="今月" id="get-current-data" />
+  <input type="button" value="来月→" id="get-next-data" />
+  <p><label for="total-value">合計:</label><input type="text" value="" id="total-value" name="total-value" size="20" /></p>
+</div>
+
+<div id="small-help">
+	<p>行の追加 :「追加 &gt;&gt;」行に追記</p>
+	<p>行の削除 : 消したい行の「機能」カラムを選択</p>
+	<p>セルの自由編集 : F2キー</p>
+</div>
+
+<script type="text/javascript">
+var categories = [['',0],['食費',1],['日用品',2],['服飾費',3],['光熱費',4],['医療費',5],['衛生費',6],['交通通信費',7],['住居費',8],['備品',9],['交際費',10], ['教育費',11],['趣味',12],['社会保険料',13],['税金',14],['贈答',15],['その他',16]];
+var tableInfo = [
+  { name:'id', type:'idshow', className:'id-row', title:'機能' },
+  { name:'date', type:'datetime', className:'date-row', title:'日時', option:{ format:'Y-m-d' } },
+  { name:'money', type:'number', className:'money-row', title:'支払金額' },
+  { name:'usecase', type : 'auto-complete', className:'usecase-row', title:'用途' },
+  { name:'memo', type : 'text', className:'memo-row', title:'備考' },
+  { name:'category', type : 'select', className:'category-row', title:'カテゴリ', option:{values:categories} }
+];
+
+
+/**
+ * 列ごとに、フィルターをかけて、表示に必要な情報のみを取り出す
+ * @param {Hash} row １列分の情報
+ * @return {Hash} 列ごとの情報の連想配列
+ */
+coAccess.prototype.filter = function( row ){
+  var r = row['account_book'];
+  var nrow = {};
+  this.tableHeader.each( function(colInfo){
+    try{
+      var d = r.hasOwnProperty(colInfo.name) ? r[colInfo.name] : '';
+      // なぜかここでエラーを出して停止
+      nrow[colInfo.name] = d;
+    }catch(e){}
+  } );
+  return nrow;
+}
+
+/**
+ * リクエスト処理を行います
+ * @param {Hash} option 検索条件
+ * @param {String} format 欲しい拡張子
+ */
+coAccess.prototype.request = function( option, format ){
+  var path = "<%= account_books_path %>"+'/get_row/1';
+  
+  // 拡張子ごとに問い合わせ先を変更
+  if( 'xsl'==format ) path = "<%= account_books_path %>"+'/export/1';
+  var self = this;
+  // 検索条件式を作成
+  function toCondition( o ){
+    var h = AccessHtmlHelper.helper(o.type);
+    var v = h.get( o.value );
+    var s = o.name +' '+ o.expression +' '+ "'"+v+"'";
+    return s;
+  }
+  // 検索条件の変更
+  if( option && option.hasOwnProperty('search') ) this.flushSerchTable( option.search );
+  
+  // 検索条件式を作成
+  var os = this.search.collect(toCondition);
+  var cond='';
+  for( var i=0; i<os.length; i++ ){
+    cond += os[i];
+    if( i!=(os.length-1) ) cond  += ' '+this.search[i].join+' ';
+  }
+  // ソート条件を指定
+  if( option && option.hasOwnProperty('sort') ) this.flushSortTable( option.sort );
+  
+  this.pgbar.show();  // プログレスバー
+  
+  new Ajax.Request( path, {
+    method: 'post',
+    parameters: { conditions : cond }, 
+    onComplete: function(req){
+      var o = eval('('+req.responseText+')');
+      self.setTable( o );
+    }
+  } );
+}
+
+/**
+ * idshowは、表示だけで編集を禁止する場合の処理
+ */
+AccessHtmlHelper.helpers.idshow = {
+  create:function( row, colInfo, self ){
+    var div = document.createElement( 'div' );
+    div.className='cell';
+    
+    var addtxt = '<span style="font-size:0.8em;">追加&nbsp;&gt;&gt;</span>';
+    
+    div.onmouseover=function(e){ div.innerHTML = ('*'==row[colInfo.name]) ? addtxt : '削除' ; }
+    div.onmouseout=function(e){ div.innerHTML = ('*'==row[colInfo.name]) ? addtxt : '--' ; }
+    div.onclick=function(e){ self.deleteRow( row[colInfo.name] ); }
+    
+    div.innerHTML = ('*'==row[colInfo.name]) ? addtxt : '--' ;
+    return div;
+  },
+  get:function( d ) { return d; },
+  set:function( el, d ){ return undefined; }
+}
+
+/**
+ * idshowは、表示だけで編集を禁止する場合の処理
+ */
+AccessHtmlHelper.helpers['auto-complete'] = function(){
+	var list = [];
+	var path = "<%= url_for :action=>:suggest, :id=>1 %>";
+	
+	new Ajax.Request( path, {
+		method: 'post',
+		onComplete: function(req){
+			var o = eval('('+req.responseText+')');
+			list = o;
+		}
+	} );
+	
+	var minp=document.createElement('input');
+	minp.type='text';
+	minp.className='auto-complete-input';
+	minp.autecomplete='off';
+	minp.name="pattern";
+	
+	function inper(v,self){
+		var inp=minp.cloneNode(true);
+		inp.value=v;
+		// オートコンプリートを発動
+		inp.onfocus=function(e){
+				new Suggest.Local( inp, div, list, self, 
+				{
+					dispMax: 3,
+					interval: 100,
+					onSelect:function(index){
+						inp.value = list[index];
+						var p = self.selectPoint;
+						self.table[p.y-1][self.tableHeader[p.x].name] = inp.value;
+					}
+				});
+		}
+		inp.onkeydown=function(e){
+			// Enterキーを押したときは脱出
+			if( 13 != e.keyCode ) return;
+			var p = self.selectPoint;
+			self.guicancel( false );
+			self.table[p.y-1][self.tableHeader[p.x].name] = inp.value;
+		}
+		var div = document.createElement('div');
+		div.className='suggest';
+		
+		return [inp,div];
+	}
+	
+	return {
+		create:function( row, colInfo, self ){
+			return inper(row[colInfo.name],self);
+		},
+		get:function( d ) { return d; },
+		set:function( el, d ){ return undefined; }
+	}
+}
+
+/**
+ * 障害管理表を管理する表クラス
+ * coAccessから継承して、Access風のインターフェースを実現します
+ */
+function AccountBooks(){
+  this.tableHeader = tableInfo;
+}
+AccountBooks.prototype = new coAccess('trouble-logs-form',tableInfo);
+
+/**
+ * 合計表示機能実装のため、機能をオーバーライド
+ */
+coAccess.prototype.old_flush = coAccess.prototype.flush;
+coAccess.prototype.flush = function( pnt ){
+  this.old_flush(pnt);
+  this.printotal();
+}
+
+/**
+ * 合計額表示部分
+ */
+coAccess.prototype.printotal = function(){
+  var tbl=this.table, sum=0;
+  for( var i=0; i<tbl.length; i++ ){
+    var n=parseInt( tbl[i]['money'] );;
+    sum += (n?n:0);
+  }
+  $('total-value').value = sum;
+}
+
+/**
+ * 指定した行をアップデートします
+ * @param {int} y 行番号
+ */
+AccountBooks.prototype.update = function( y, is_not_update ){
+  var self = this;
+  var prow = row = self.table[y-1];
+  if( !row['money'] ) row['money'] = 0; // 空のセルなら時間を埋める
+  if( !row['date'] ) row['date'] = new Date().toString("Y-m-d"); // 空のセルなら時間を埋める
+  var path = "<%= account_books_path %>";
+  new Ajax.Request( path+'/update_row/'+(('*'==row.id)?'add_row':row.id), {
+    method: 'post',
+    parameters: row,
+    onComplete: function(req){
+      if(is_not_update) return;
+      
+      var o = eval('('+req.responseText+')');
+      // データが新しい場合は、列に追加&テーブル更新
+      self.addTable([o]);
+      self.flushRow( y, self.selectPoint, [o], (prow.id=='*') );
+      
+      self.printotal();
+    }
+  } );
+}
+
+/**
+ * 指定した行を削除します
+ * @param {int} y 行番号row.idy
+ */
+AccountBooks.prototype.deleteRow = function( y ){
+  var self = this;
+  var path = "<%= account_books_path %>";
+  new Ajax.Request( path+'/delete_row/'+y, {
+    method: 'post',
+    parameters:{ id:y },
+    onComplete: function(req){ self.request(self); }
+  } );
+}
+
+// GUIへの機能の追加処理
+Event.observe( window, 'load', function(e){
+  var tblogTbl = new AccountBooks();
+  tblogTbl.flush(); // とりあえずデータが空の状態で表示
+  
+  (function(){
+    var cd = (new Date()).beginningOfMonth();
+    var nd = (new Date()).endOfMonth();
+    tblogTbl.request( {
+      search:[
+        { name:'date', type:'datetime', expression:'>=', value:cd.toString('Y-m-d H:i:s'), join:'AND' },
+        { name:'date', type:'datetime', expression:'<=', value:nd.toString('Y-m-d H:i:s'), join:'AND' }
+      ],
+      sort:[{ name:'date', order:'asc' }]
+    } );
+  })();
+  
+  // 月を取得
+  var path = "<%= account_books_path %>/export/";
+  var statistic_path = "<%= account_statistics_path %>/index/";
+  var d = new Date();
+  // 先月
+  Event.observe( 'get-prev-data', 'click', function (e){
+    d.prevMonth();
+    var cd = d.beginningOfMonth();
+    var nd = new Date(d).endOfMonth();
+    tblogTbl.request( {
+      search:[
+        { name:'date', type:'datetime', expression:'>=', value:cd.toString('Y-m-d H:i:s'), join:'AND' },
+        { name:'date', type:'datetime', expression:'<=', value:nd.toString('Y-m-d H:i:s'), join:'AND' }
+      ],
+      sort:[{ name:'date', order:'asc' }]
+    } );
+    tblogTbl.flush();
+    
+    var day_span = cd.toString('Ymd')+'-'+nd.toString('Ymd');
+    $('export-xsl-link').href = path + day_span + '.xls';
+    $('export-csv-link').href = path + day_span + '.csv';
+    $('export-ofx-link').href = path + day_span + '.ofx';
+    $('statistic-link').href = statistic_path + day_span;
+  });
+  Event.observe( 'get-current-data', 'click', function (e){
+    var cd = d.beginningOfMonth();
+    var nd = new Date(d).endOfMonth();
+    tblogTbl.request( {
+      search:[
+        { name:'date', type:'datetime', expression:'>=', value:cd.toString('Y-m-d H:i:s'), join:'AND' },
+        { name:'date', type:'datetime', expression:'<=', value:nd.toString('Y-m-d H:i:s'), join:'AND' }
+      ],
+      sort:[{ name:'date', order:'asc' }]
+    } );
+    
+    var day_span = cd.toString('Ymd')+'-'+nd.toString('Ymd');
+    $('export-xsl-link').href = path + day_span + '.xls';
+    $('export-csv-link').href = path + day_span + '.csv';
+    $('export-ofx-link').href = path + day_span + '.ofx';
+    $('statistic-link').href = statistic_path + day_span;
+  });
+  // 来月
+  Event.observe( 'get-next-data', 'click', function (e){
+    d.nextMonth();
+    var cd = d.beginningOfMonth();
+    var nd = new Date(d).endOfMonth();
+    tblogTbl.request( {
+      search:[
+        { name:'date', type:'datetime', expression:'>=', value:cd.toString('Y-m-d H:i:s'), join:'AND' },
+        { name:'date', type:'datetime', expression:'<=', value:nd.toString('Y-m-d H:i:s'), join:'AND' }
+      ],
+      sort:[{ name:'date', order:'asc' }]
+    } );
+    
+    var day_span = cd.toString('Ymd')+'-'+nd.toString('Ymd');
+    $('export-xsl-link').href = path + day_span + '.xls';
+    $('export-csv-link').href = path + day_span + '.csv';
+    $('export-ofx-link').href = path + day_span + '.ofx';
+    $('statistic-link').href = statistic_path + day_span;
+  });
+} );
+</script>
+
+</div><!-- div:content -->
+
+<br />
+
+</body>
+</html>

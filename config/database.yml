@@ -1,21 +1,21 @@
 development:
   adapter: mysql2
-  database: jp_fullstack_development
+  database: flextures_dev
   username: root
   password: root
   host: localhost
 
 test:
   adapter: mysql2
-  database: jP_fullstack_test 
+  database: flextures_test 
   username: root
   password: root
   host: localhost
 
 production:
   adapter: mysql2
-  database: jp_fullstack
-  username: cook24
+  database: flextures
+  username: root
   password: root
   host: localhost
 
