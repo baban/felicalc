@@ -1,0 +1,72 @@
+<%
+  page_title = @resource.model_name.human
+  title(page_title)
+%>
+
+<% content_for :main_grid do %>
+
+  <h2>
+    <%= page_title %>
+    <small><%= list_actions %></small>
+  </h2>
+
+  <%= display_flash_message %>
+
+  <%= render 'index' %>
+
+  <ul class="predefined_filters">
+    <li>
+      <%= link_to Typus::I18n.t("All"), params.dup.cleanup.merge(:action => 'index') %>
+      <%= "(#{resource.count})" if @resource.typus_options_for(:counters) %>
+    </li>
+
+    <% @resource.typus_scopes.each do |scope| %>
+      <li>
+        <%= link_to Typus::I18n.t(scope.humanize), :scope => scope %>
+        <%= "(#{@resource.send(scope).count})" if @resource.typus_options_for(:counters)  %>
+      </li>
+    <% end %>
+
+    <% predefined_filters.each do |filter, action, scope| %>
+      <li>
+        <% url = action.is_a?(String) ? params.dup.cleanup.merge(:action => action) : action %>
+        <%= link_to Typus::I18n.t(filter), url %>
+        <%= "(#{@resource.send(scope).count})" if @resource.typus_options_for(:counters) && scope && @resource.respond_to?(scope) %>
+      </li>
+    <% end %>
+
+    <% if resource.any? && (formats = resource.typus_options_for(:export).extract_settings).any? %>
+      <li>|</li>
+      <% formats.each do |format| %>
+        <li><%= link_to format.upcase, params.merge(:format => format) %></li>
+      <% end %>
+    <% end %>
+  </ul>
+
+  <% if (build_filters || search) %>
+    <div class="filters">
+      <%= build_filters %>
+      <%= search %>
+    </div>
+  <% end %>
+
+  <% if @items.any? -%>
+    <% if controller.respond_to?(:bulk) %>
+      <%= build_actions { build_list(@resource, fields, @items) } %>
+    <% else %>
+      <%= build_list(@resource, fields, @items) %>
+    <% end %>
+    <%= admin_paginate(@items, Typus.pagination) %>
+  <% else %>
+    <p><%= Typus::I18n.t("No %{resources} found.", :resources => @resource.model_name.human(:count => 2)) %></p>
+  <% end %>
+
+<% end %>
+
+<div class="grid_2">
+  <%= build_sidebar %>
+</div>
+
+<div class="grid_10">
+  <%= yield :main_grid %>
+</div>

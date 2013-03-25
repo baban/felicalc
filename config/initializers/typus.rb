@@ -3,8 +3,8 @@
 Typus.setup do |config|
 
   # Application name.
-  config.admin_title = "Cook24.vn"
-  config.admin_sub_title = "shops innnovation"
+  config.admin_title = "jp_fullstack"
+  config.admin_sub_title = ""
 
   # When mailer_sender is set, password recover is enabled. This email
   # address will be used in Admin::Mailer.
@@ -17,7 +17,7 @@ Typus.setup do |config|
   # This is a required Rails configuration. In production it must be the actual
   # actual host of your application.
   #
-  config.mailer_sender = "truongdinhhoang80@gmail.com"
+  config.mailer_sender = "hoge@mage.jp"
 
   # Define paperclip attachment styles.
   # config.file_preview = :medium

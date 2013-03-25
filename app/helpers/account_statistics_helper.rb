@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module AccountStatisticsHelper
   require "fusioncharts_helper"
   include FusionChartsHelper
