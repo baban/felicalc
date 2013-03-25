@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120427000080) do
+ActiveRecord::Schema.define(:version => 20130312164220) do
+
+  create_table "account_books", :force => true do |t|
+    t.integer  "user_id",                                :null => false
+    t.datetime "date",                                   :null => false
+    t.integer  "money",      :limit => 8, :default => 0, :null => false
+    t.string   "usecase"
+    t.integer  "cardtype",                :default => 0
+    t.integer  "category",                :default => 0
+    t.text     "memo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "account_books", ["date"], :name => "index_account_books_on_date"
+  add_index "account_books", ["user_id"], :name => "index_account_books_on_user_id"
 
   create_table "admin_users", :force => true do |t|
     t.string   "first_name",       :default => "",    :null => false
@@ -28,6 +43,14 @@ ActiveRecord::Schema.define(:version => 20120427000080) do
   end
 
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
+
+  create_table "category_suggests", :force => true do |t|
+    t.string  "name",          :null => false
+    t.integer "m_category_id", :null => false
+  end
+
+  add_index "category_suggests", ["name", "m_category_id"], :name => "category_idx"
+  add_index "category_suggests", ["name"], :name => "name_idx"
 
   create_table "omniusers", :force => true do |t|
     t.string   "provider"

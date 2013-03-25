@@ -1,0 +1,55 @@
+
+
+<div class="att_bg radi10">
+  <h2 class="fo_b">Đăng nhập qua Facebook, Google+ hoặc Twitter</h2>
+  <p class="cl txt12">Bạn có thể đăng nhập hoặc đăng ký qua tài khoản của Facebook, Google+ hoặc Twitter.</p>
+  <p class="cl txt12">Hãy click vào đây!</p>
+  <div class="cl clearfix">
+    <ul id="login_links" class="ant_s clearfix">
+      <li class="flo_l"><%= link_to raw(image_tag('/assets/common/fb.png', alt:'', size:'18x18'))+"Facebook",
+                            "http://cook24.vn/auth/facebook", class:"radi5" %></li>
+      <li class="flo_l"><%= link_to raw(image_tag('/assets/common/tw.png', alt:'', size:'18x18'))+"Twitter", 
+                            "http://cook24.vn/auth/twitter", class:"radi5" %></li>
+      <li class="flo_l"><%= link_to raw(image_tag('/assets/common/gp.png', alt:'', size:'18x18'))+"Google",
+                            "http://cook24.vn/auth/google_oauth2", class:"radi5" %></li>
+    </ul>
+  </div>
+  <br />
+  
+  <h2 class="fo_b">Đăng nhập qua email và password</h2>
+  <div class="login_box clearfix">
+    <div class="login_ind flo_l line">
+      <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+      <div>
+        <%= f.label :email %>
+        <%= f.email_field :email, class:"ipt" %>
+      </div>
+      
+      <div>
+        <%= f.label :password %>
+        <%= f.password_field :password, class:"ipt" %>
+      </div>
+      
+      <% if devise_mapping.rememberable? %>
+      <div>
+        <%= f.check_box :remember_me, style:"display:inline;width:auto;" %>
+        <%= f.label :remember_me, style:"display:inline;" %>
+      </div>
+      <% end %>
+      <div class="rbtn cl"><%= f.submit "Đăng Nhập", id:"sign_in", class:"cblu radi10 txt12" %></div>
+      <!--<%= render "links" %>-->
+      <%= link_to "Nếu bạn quên mật khẩu?", new_password_path(resource_name) %><br />
+      <% end %>
+    </div>
+    
+    <div class="login_ind flo_r" id="get_account_area">
+      <h3 class="txt14">Nếu bạn chưa có tài khoản?</h3>
+      <div class="rbtn cl">
+        <%= link_to "Đăng ký thành viên", new_user_registration_url, class:"cblu radi10 txt12" %>
+      </div>
+    </div>
+    
+    <br />
+  </div>
+</div>
+<br />

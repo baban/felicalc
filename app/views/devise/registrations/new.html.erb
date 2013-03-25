@@ -1,0 +1,194 @@
+<% include_action_javascript %>
+
+<% if @facebook %>
+<div class="bace_bg">
+  <div class="contents_bg clearfix">
+    <article class="inp_a clearfix">
+      <h2><%= t(:title, scope:"views.users.sign_up") %></h2>
+      <% @tmp = Omniuser.find_by_uid(session[:tmp_uid]) %>
+      <%= semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      
+      <div class="err">
+	<%= devise_error_messages! %>
+      </div>
+      <section class="line">
+	<div class="ltc cl clearfix">
+	  <p><%= f.label :email %></p>
+	  <%= f.email_field :email %>
+	  <p class="ivie">
+	    <span class="ive txt11 radi10">Công khai</span>
+	  </p>
+	</div>
+	<div class="ltc cl clearfix">
+	  <p><%= f.label :password %></p>
+	  <%= f.password_field :password %>
+	  <p class="ivie">
+	    <span class="ive txt11 radi10">Không công khai</span>
+	  </p>
+	</div>
+	<div class="ltc cl clearfix">
+	  <p>Mật khẩu(xác nhận)*</p>
+	  <%= f.password_field :password_confirmation %>
+	  <%=f.hidden_field :omniuser_id, value: (current_omniuser && current_omniuser.id) %>
+	</div>
+	<%= f.hidden_field :omniuser_id, :value => (@tmp && @tmp.id) %>
+	
+	
+	<%= f.semantic_fields_for :user_profile do |profile| %>
+	<%= profile.semantic_errors %>
+	<div class="ltc cl clearfix">
+	  <p>
+	  <p><%= profile.label :nickname %></p>
+	  </p>
+	  <%= profile.text_field :nickname %>
+	  <p class="ivie">
+	    <span class="ive txt11 radi10">Công khai</span>
+	  </p>
+	</div>
+	<div class="ltc cl clearfix">
+	  <p>
+	    <%= profile.label :birthday %>
+	  </p>
+	  <div class="ibox">
+	    <%= profile.date_select :birthday, :prompt => { :day => 'Ngày', :month => 'Tháng', :year => 'Năm' }, :use_month_numbers=> true, :start_year=> 1930, :end_year=> Time.now.year, :date_separator=>'/' %>
+	  </div>
+	  <p class="ivie">
+	    <span class="ive txt11 radi10">Công khai</span>
+	  </p>
+	</div>
+	<div class="sltc cl clearfix">
+	  <p>
+	    <%= profile.label :sex %>
+	  </p>
+	  <div class="ibox">
+	    <label>
+	      <%= profile.input :sex, :as=>:radio, collection:{ "Nam" => 1, "Nữ" => 2 } %>
+	    </label>
+	  </div>
+	  <p class="ivie">
+	    <span class="ive txt11 radi10">Công khai</span>
+	  </p>
+	</div>
+	<div class="ltc cl clearfix">
+	  <p>
+	    <%= profile.label :distinct_id %>
+	  </p>
+	  <div class="ibox">
+	    <%= distinct_selecter( profile, selected: 0 ) %>
+	    <p class="txt11">
+	      <%= t(:address_description, scope:"views.users.sign_up") %>
+	    </p>
+	  </div>
+	  <p class="ivie">
+	    <span class="ive txt11 radi10">Công khai</span>
+	  </p>
+	</div>
+	<%= profile.hidden_field :remote_image_url, value: flash[:image] %>
+	<div class="ltc cl clearfix">
+	  <p>
+	    Thỏa thuận xử dụng
+	  </p>
+	  <div class="ibox">
+	    <div id="terms_of_description" class="inp_t cl">
+	      <p>
+		<li>
+		  Bản quy định cung cấp và sử dụng dịch vụ.<br />
+		  Bản quy định cung cấp và sử dụng dịch vụ này ghi lại những điều khoản hợp pháp đối với việc sử dụng các dịch vụ mà chúng tôi cung cấp. Việc sử dụng các dịch vụ của chúng tôi đồng nghĩa với việc bạn đồng ý với bản quy định này, cho dù bạn là Khách viếng thăm (những người chỉ xem các nội dung có trên hệ thống) hay là Thành viên (những người đăng ký và sử dụng đầy đủ các dịch vụ). Thuật ngữ Người sử dụng (NSD) được sử dụng trong văn bản này bao gồm cả Khách viếng thăm và Thành viên. Nội dung của văn bản này có thể được thay đổi mà không cần thông báo trước khi chúng tôi cảm thấy nó không còn phù hợp. Việc tiếp tục sử dụng dịch vụ sau khi được cập nhật đồng nghĩa với việc bạn chấp nhận và đồng ý tuân theo những quy định của bản quy định mới. Chúng tôi yêu cầu bất kỳ NSD nào khi sử dụng dịch vụ của Cook24.vn đều phải đồng ý và cam kết từ bỏ mọi khiếu nại đối với bản quy định này/bản quy định mới nhất tại thời điểm sử dụng dịch vụ mà không có bất cứ ngoại lệ hay miễn trừ nào. Bản quy định này cũng ghi rõ những điều khoản đối với việc sử dụng những thông tin, nội dung được gửi lên hệ thống Cook24.vn, bao gồm cả quyền, nghĩa vụ và giới hạn. Đi kèm với văn bản này là văn bản quy định về bảo mật thông tin cá nhân.
+		</li>
+		<br />
+		<li>
+		  Điều khoản đăng ký.<br />
+		  Trong quá trình thực hiện việc đăng ký, chúng tôi yêu cầu tất cả NSD cung cấp đầy đủ, trung thực và chính xác những thông tin dùng để đăng ký tài khoản của mình. Nếu phát hiện có thông tin không chính xác, thiếu trung thực, chúng tôi có quyền tạm khóa hoặc đình chỉ việc sử dụng tài khoản của NSD mà không cần thông báo cho bạn cũng như không phải chịu bất cứ trách nhiệm nào. NSD hoàn toàn chịu trách nhiệm việc giữ quyền kiểm soát mật khẩu của mình, không sử dụng tài khoản của NSD khác cũng như không chia sẻ thông tin tài khoản của mình cho bất kỳ NSD nào. Trong bất cứ trường hợp nào, bạn sẽ phải chịu trách nhiệm cho tất cả những hành động có liên quan đến việc sử dụng mật khẩu của mình trên hệ thống. Nếu bạn phát hiện những nghi vấn về việc sử dụng trái phép tài khoản của mình, bạn có thể liên hệ với chúng tôi để được hỗ trợ.
+		</li>
+		<br />
+		<li>
+		  Quyền sử dụng của Thành viên.<br />
+		  Tất cả NSD hệ thống đã đăng ký thành viên có quyền sử dụng toàn bộ các chức năng mà hệ thống cung cấp. Quy định về việc đăng tải nội dung sẽ được đề cập dưới đây. Tất cả những nội dung đăng tải từ NSD trái với quy định sử dụng sẽ bị xóa mà không cần báo trước bởi Ban quản trị, cũng như có thể dẫn đến việc đình chỉ sử dụng tài khoản của NSD. Thông tin tài khoản và thông tin cá nhân của NSD sẽ được chúng tôi giữ an toàn tuyệt đối, chúng tôi cam đoan không sử dụng thông tin cá nhân của NSD vào bất kỳ mục đích thương mại nào.
+		</li>
+		<br />
+		<li>
+		  Bản quyền nội dung trên hệ thống Cook24.vn.<br />
+		  Nội dung trên Cook24.vn là tài sản của Cook24.vn. Bạn không thể copy và sử dụng khi không có sự đồng ý của chúng tôi. Tuy nhiên bạn có thể đăng đường link đến trang web khác nhưng phải ghi rõ nguồn từ Cook24.vn.
+		</li>
+		<br />
+		<li>
+		  Qui định về nội dung bình luận về nhà hàng trên hệ thống.<br />
+		  Cấm đăng những bình luận khiếm nhã, nói xấu người khác hoặc bôi nhọ cá nhân cũng như tên tuổi nhà hàng. Chúng tôi sẽ xóa những bình luận khiếm nhã mà không cần báo trước. Và tùy vào nội dung bình luận chúng tôi có thể đình chỉ tài khoản của bạn mà không cần báo trước. Đề ghị các bạn đọc kỹ, chấp thuận và thực hiện nghiêm túc các quy định sau nếu đồng ý trở thành thành viên của Cook24.vn
+		</li>
+	      </p>
+	    </div>
+	  </div>
+	</div>
+	<div class="btn_comment">
+	  <%= f.submit t(:post_button, scope:"views.users.sign_up"), id:"sign_in_button", class:"radi10" %>
+	</div>
+	<% end %>
+      </section>
+      <% end %>
+      
+      <section class="sns_a" style="margin-top: 50px;">
+	<div class="cl clearfix">
+	  <h2 class="fo_b">Đăng ký thành viên qua Facebook, Google+ hoặc Twitter</h2>
+	  <div class="txt14">
+	    Bạn có thể đăng kí thành viên nhanh chóng qua tài khoản của Facebook, Google+ hoặc Twitter.<br />
+	    Hãy click một trong những link sau để đăng kí thành viên.
+	  </div>
+	  <ul class="ant_s clearfix">
+	    <li class="flo_l">
+	      <%= link_to raw(image_tag('/assets/common/fb.png', alt:'', size:'18x18'))+"Facebook", "/auth/facebook", class:"radi5" %>
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </li>
+	    <li class="flo_l">
+	      <%= link_to raw(image_tag('/assets/common/tw.png', alt:'', size:'18x18'))+"Twitter",  "/auth/twitter", class:"radi5" %>
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </li>
+	    <li class="flo_l">
+	      <%= link_to raw(image_tag('/assets/common/gp.png', alt:'', size:'18x18'))+"Google",   "/auth/google_oauth2", class:"radi5" %>
+	      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </li>
+	  </ul>
+	  <br />
+	  <div class="cl txt14">
+	    Nếu bạn chưa có tài khoản của Facebook hoặc Google+ thì hãy đăng kí từ link dưới đây !
+	  </div>
+	  <ul class="">
+	    <li class="flo_l">
+	      <a href="http://www.facebook.com/" style="color: #FE6B1D;">Sign up with Facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </li>
+	    <li class="flo_l">
+	      <a href="https://twitter.com/" style="color: #FE6B1D;">Sign up with Twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    </li>
+	    <li class="flo_l">
+	      <a href="https://plus.google.com/up/search">Sign up with Google</a>
+	    </li>
+	  </ul>
+	</div>
+      </section>
+    </article>
+  </div>
+</div>
+<% else %>
+<div class="att_bg radi10">
+  <h2 class="fo_b">Đăng ký thành viên qua Facebook, Google+ hoặc Twitter</h2>
+  <p class="cl txt12">Bạn có thể đăng kí thành viên nhanh chóng qua tài khoản của Facebook, Google+ hoặc Twitter.</p>
+  <p class="cl txt12">Hãy click một trong những link sau để đăng kí thành viên:</p>
+  <div class="cl clearfix">
+    <ul id="login_links" class="ant_s clearfix">
+      <li class="flo_l"><%= link_to raw(image_tag('/assets/common/fb.png', alt:'', size:'18x18'))+"Facebook",
+			    "http://cook24.vn/auth/facebook", class:"radi5" %></li>
+      <li class="flo_l"><%= link_to raw(image_tag('/assets/common/tw.png', alt:'', size:'18x18'))+"Twitter", 
+			    "http://cook24.vn/auth/twitter", class:"radi5" %></li>
+      <li class="flo_l"><%= link_to raw(image_tag('/assets/common/gp.png', alt:'', size:'18x18'))+"Google",
+			    "http://cook24.vn/auth/google_oauth2", class:"radi5" %></li>
+    </ul>
+    
+    <p class="cl txt12">Nếu bạn chưa có tài khoản của Facebook hoặc Google+ thì hãy click vào link dưới đây !</p>
+    <ul>
+      <li class="flo_l"><a href="http://www.facebook.com/" style="color: #FE6B1D;">Sign up with Facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+      <li class="flo_l"><a href="https://twitter.com/" style="color: #FE6B1D;">Sign up with Twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+      <li class="flo_l"><a href="https://plus.google.com/up/search" style="color: #FE6B1D;">Sign up with Google</a></li>
+    </ul>
+  </div>
+  <br />
+</div>
+<% end %>
