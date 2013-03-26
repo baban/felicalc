@@ -1,17 +1,9 @@
-<head>
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
-  
-  <title><%= SERVICE_NAME %>: 家計簿</title>
-  <%= stylesheet_link_tag "account_books", :media =>"all" %>
-  <%= javascript_include_tag "prototype" %>
+<% content_for :js_after do %>
   <%= javascript_include_tag "progressbar" %>
   <%= javascript_include_tag "coaccess" %>
   <%= javascript_include_tag "date_format" %>
   <%= javascript_include_tag "suggest" %>
-</head>
-<body>
+<% end %>
 
 <div id="header">
   <div id="login-bar">
@@ -364,8 +356,3 @@ Event.observe( window, 'load', function(e){
 </script>
 
 </div><!-- div:content -->
-
-<br />
-
-</body>
-</html>

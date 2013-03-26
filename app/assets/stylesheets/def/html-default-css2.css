@@ -1,10 +1,10 @@
-@charset "Shift_JIS";
+@charset "UTF-8";
 
 /*
-ƒuƒ‰ƒEƒUŠÔ‚Ì•\Ž¦·‚ð–„‚ß‚é‚½‚ß‚ÌAƒfƒtƒHƒ‹ƒgƒXƒ^ƒCƒ‹ƒV[ƒgB‚¿‚å‚Á‚ÆÝ’è‚µ‚·‚¬c
-xhtml1.0, 1.1‚ ‚½‚è‚ÅDeprecated‚Ìƒ^ƒO“ü‚ê‚È‚¢•ûŒü‚Åì¬
-“K—p”ÍˆÍ:ƒTƒCƒg‘S‘Ì
-CSS2ŒÀ’èÝ’è
+ãƒ–ãƒ©ã‚¦ã‚¶é–“ã®è¡¨ç¤ºå·®ã‚’åŸ‹ã‚ã‚‹ãŸã‚ã®ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒˆã€‚ã¡ã‚‡ã£ã¨è¨­å®šã—ã™ãŽâ€¦
+xhtml1.0, 1.1ã‚ãŸã‚Šã§Deprecatedã®ã‚¿ã‚°å…¥ã‚Œãªã„æ–¹å‘ã§ä½œæˆ
+é©ç”¨ç¯„å›²:ã‚µã‚¤ãƒˆå…¨ä½“
+CSS2é™å®šè¨­å®š
 */
 a, abbr, acronym, dfn, em, q, span, strong, ruby, code, cite,
 ins, del {
@@ -49,7 +49,7 @@ pre > code {
 	overflow:auto;
 }
 
-/** ie‚ª‚Ü‚¾css2Š®‘S‘Î‰ž‚Å‚È‚¢‚Ì‚Å‚¨‚ ‚¸‚¯ */
+/** ieãŒã¾ã css2å®Œå…¨å¯¾å¿œã§ãªã„ã®ã§ãŠã‚ãšã‘ */
 code.block{
 	white-space:pre;
 }
@@ -88,7 +88,7 @@ div.td{
 	display:table-cell;
 }
 
-/* ”Ä—pƒeƒLƒXƒg—v‘f */
+/* æ±Žç”¨ãƒ†ã‚­ã‚¹ãƒˆè¦ç´  */
 
 input[type="checkbox"],
 input[type="radio"] {
@@ -140,15 +140,15 @@ ruby {
   vertical-align:bottom;
 }
 
-/* ƒ‹ƒrƒx[ƒX */
-ruby > rb,@ruby > rbc {
+/* ãƒ«ãƒ“ãƒ™ãƒ¼ã‚¹ */
+ruby > rb,ã€€ruby > rbc {
   display:table-row-group;
   text-align:center;
   line-height:90%;
 }
 
-/* ‘O‘¤ƒ‹ƒrƒeƒLƒXƒg */
-ruby > rt,@ruby > rbc + rtc {
+/* å‰å´ãƒ«ãƒ“ãƒ†ã‚­ã‚¹ãƒˆ */
+ruby > rt,ã€€ruby > rbc + rtc {
   display:table-header-group;
   font-size:70%;
   line-height:30%;
@@ -156,7 +156,7 @@ ruby > rt,@ruby > rbc + rtc {
   text-align:center;
 }
 
-/* Œã‘¤ƒ‹ƒrƒeƒLƒXƒg */
+/* å¾Œå´ãƒ«ãƒ“ãƒ†ã‚­ã‚¹ãƒˆ */
 ruby > rbc + rtc + rtc {
   display:table-footer-group;
   font-size:70%;
@@ -165,7 +165,7 @@ ruby > rbc + rtc + rtc {
   text-align:center;
 }
 
-/* •¡ŽGƒ‹ƒrƒeƒLƒXƒg */
+/* è¤‡é›‘ãƒ«ãƒ“ãƒ†ã‚­ã‚¹ãƒˆ */
 rbc > rb,
 rtc > rt {
   display:table-cell;
@@ -178,7 +178,7 @@ rtc > rt[rbspan] {
   text-align:center;
 }
 
-/* ƒ‹ƒrŠ‡ŒÊ */
+/* ãƒ«ãƒ“æ‹¬å¼§ */
 rp {
   display:none;
 }

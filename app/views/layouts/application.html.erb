@@ -6,12 +6,9 @@
   <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
   
   <title>家計簿</title>
-  <%= stylesheet_link_tag "account_books", :media =>"all" %>
+  <%= stylesheet_link_tag params[:controller], :media =>"all" %>
   <%= javascript_include_tag "prototype" %>
-  <%= javascript_include_tag "progressbar" %>
-  <%= javascript_include_tag "coaccess" %>
-  <%= javascript_include_tag "date_format" %>
-  <%= javascript_include_tag "suggest" %>
+  <%= yield :js_after %>
 </head>
 <body>
 

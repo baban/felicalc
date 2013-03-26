@@ -57,7 +57,8 @@ JpFullstack::Application.routes.draw do
   match "/auth/:provider/callback" => "sessions#callback"
   match "/logout" => "sessions#destroy", :as => :logout
 
-  root to:"top#index"
+  #root to:"top#index"
+  root to:"account_books#index"
   devise_for :user
   get "top/index", as:'user_root'
 
