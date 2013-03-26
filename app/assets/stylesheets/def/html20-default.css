@@ -1,0 +1,244 @@
+@charset "Shift_JIS";
+
+/*
+ブラウザ間の表示差を埋めるための、デフォルトスタイルシート。ちょっと設定しすぎ…
+xhtml1.0, 1.1あたりでDeprecatedのタグ入れない方向で作成
+適用範囲:サイト全体
+CSS1限定設定
+*/
+
+/* ============================
+root elements
+============================ */
+body {
+	font:normal normal 400 1.0em/1.2 sans-serif;
+	font-family:"MS UI Gothic", Osaka, sans-serif;
+	background-color:#fff;
+	color:#000;
+	border:none 1px #000;
+	cursor:auto;
+	margin:0;
+	padding:0.6em 1em;
+}
+
+/* ===========================
+inline elements
+=========================== */
+a, abbr, acronym, del, dfn, em, ins, q, span, strong, ruby, code, cite {
+	font-style:normal;
+	text-decoration:none;
+	border:none 1px #aaa;
+}
+
+a {
+	text-decoration:underline;
+	color:#00f;
+}
+
+a:visited,
+a:hover,
+a:active {
+	color:#f00;
+}
+
+abbr, acronym {
+	border-style:none none dotted none;
+	cursor:help;
+}
+
+del {
+	font-family:italic;
+	text-decoration:line-through;
+}
+
+cite {
+	margin:0 0.3em;
+}
+
+/* 強調の強さは em ,strong, strong.stronger, strong.very-strong の順に強くなる */
+em {
+	font-style:normal;
+	font-weight:bold;
+}
+
+strong {
+	font-size:1.2em;
+	font-weight:900;
+}
+
+strong.stronger {
+	font-size:1.4em;
+	font-weight:900;
+}
+
+strong.very-strong {
+	font-size:2.0em;
+	font-weight:900;
+}
+
+rt {
+	font-size:0.7em;
+}
+
+ins {
+	border-style:solid;
+}
+
+kbd {
+	border-style:outset;
+	border-width:0.15em;
+	padding:0.1em;
+	margin:0 0.15em;
+	background-color:#ccc;
+	border-color:#ccc;
+}
+
+code {
+	padding:0 0.2em;
+}
+
+/* ===================================
+block elements
+=================================== */
+
+/* h1～h6 */
+h {
+	margin:0.5em 0;
+	font-weight:bold;
+}
+
+h {
+	font-size:1.4em;
+}
+
+section > h {
+	font-size:1.3em;
+}
+
+section > section > h {
+	font-size:1.2em;
+}
+
+section > section > section h {
+	font-size:1.0em;
+}
+
+/* block attoribute */
+h, section, div, p, blockquote, pre, code,
+object, map,
+ul, ol, dl, dt, dd, li,
+textarea, form, iframe, select {
+	border:none 1px #000;
+	clear:both;
+}
+
+dd, blockquote, address, pre, samp,
+table,
+ul, ol, dl,
+form {
+	margin:0.2em 0.3em;
+	padding:0.2em;
+}
+
+div {
+	margin:0;
+	padding:0;
+}
+
+p {
+	padding:0;
+	margin:0;
+	line-height:1.2;
+}
+
+blockquote {
+	padding:0.6em;
+}
+
+address {
+	font-style:normal;
+}
+
+/* table,list */
+
+table, th, td
+{
+	text-decoration:none;
+	border:none 1px #000;
+	margin:0;
+	padding:0;
+}
+
+table, td, th {
+	border-style:solid;
+}
+
+table {
+	border-width:4px;
+	margin:0.3em;
+}
+
+th, td {
+	padding:0.3em;
+}
+
+th {
+	font-weight:bold;
+}
+
+ul {
+	list-style-type:none;
+	padding-left:1em;
+}
+
+ol {
+	list-style-type:decimal;
+	padding-left:2em;
+}
+
+li {
+	list-style-position:outside;
+	margin:0;
+	line-height:1.0;
+}
+
+dt, dd {
+	margin-left:1em;
+}
+
+dd {
+	padding:0.3em;
+}
+
+/* 汎用テキスト要素 */
+
+br {
+	letter-spacing:0;
+	clear:both;
+}
+
+/*
+用途が特殊です
+画像等にfloatを適用した場合、親要素のボックスから画像がはみ出ないために使用するbrタグにコレを利用します
+*/
+
+textarea, form, input {
+	border-style:solid;
+}
+
+textarea, form {
+	margin:0.2em;
+	padding:0.3em;
+}
+
+input {
+	margin:0.1em;
+	padding:0.2em;
+	font-size:1.0em;
+}
+
+select {
+	margin:0.1em;
+	border-style:inset;
+	font-size:1.0em;
+}

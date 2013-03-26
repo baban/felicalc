@@ -1,0 +1,241 @@
+
+div.excel {
+	width:100%;
+	padding:0.2em auto;
+	position:relative;
+	border-style:none;
+}
+
+div.excel > div.excel-inner > textarea {
+	height:0.2em;
+	width:0.2em;
+	left:-5em;
+	/*
+	width:96%;
+	height:4em;
+	left:0;
+	*/
+	
+	margin:0;
+	position:fixed;
+	bottom:0.4em;
+	border-style:inset;
+	border-color:#aaa;
+	border-width:2px;
+	padding:0;
+}
+
+
+/* 絞込条件や、ソートの条件を表示する領域 */
+div.format-view {
+	border-color:#000;
+	border-style:solid;
+	border-width:0.1em;
+	min-width:30%;
+	float:right;
+	min-height:10em;
+	margin-bottom:0.5em;
+}
+
+div.format-view > * {
+	margin:0.5em;
+}
+
+/* 絞込検索条件を表示するテーブル */
+table.search-table {
+	border-collapse:separate;
+	border-spacing:0;
+	border-color:#000;
+	border-style:solid;
+	border-width:0.2em;
+	min-width:12em;
+	clear:none;
+	float:left;
+}
+
+table.search-table input[type='text']{
+	width:8.7em;
+}
+
+/* ソート条件を表示するテーブル */
+table.sort-table {
+	border-collapse:separate;
+	border-spacing:0;
+	border-color:#000;
+	border-style:solid;
+	border-width:0.25em;
+	min-width:12em;
+	clear:none;
+	float:right;
+}
+
+tr > td.buttons > button {
+	float:right;
+}
+
+td.tooltable-bottom *{
+	float:right;
+}
+
+/* テーブルを入れているdivタグ */
+div#form-content {
+	margin-bottom:6.5em;
+}
+
+/* テーブルの表示 */
+table.excel {
+	border-collapse:separate;
+	border-spacing:0;
+	border-color:#000;
+	border-style:solid;
+	border-width:0.2em;
+	clear:both;
+}
+
+table.excel > tr > th {
+	border-width:1px;
+	border-style:solid;
+}
+
+table.excel > tr > td {
+	border-width:1px;
+	border-style:solid;
+	padding:0;
+	text-align:left;
+	height:1.5em;
+	background-color:white;
+}
+
+/* フォントを統一 */
+table.excel > tr > td > * {
+	font-family:monospace;
+	font-size:0.85em;
+	margin:0;
+}
+
+table.excel > tr > td > div.cell {
+	width:100%;
+	text-align:center;
+	border-width:1px;
+	border-color:transparent;
+	overflow:hidden;
+	word-break:keep-all;
+}
+
+
+table.excel > tr > td > input.text-inner {
+	width:100%;
+	border-style:dashed;
+	border-color:transparent;
+	border-width:1px;
+	outline-style:none;
+	background-color:transparent;
+	overflow:hidden;
+	text-align:right;
+	word-break:keep-all;
+	margin:0;
+	padding:0;
+}
+
+/**
+ * 選択セルの文字入力状態を表示
+ */
+table.excel > tr > td > input.text-inner:focus {
+	border-color:transparent transparent #000 transparent;
+}
+
+/**
+ * 選択セルの文字入力状態を表示
+ */
+table.excel > tr > td > select.select-inner {
+	width:100%;
+	border-style:none;
+	background-color:transparent;
+}
+
+dl.popup-cell > dd {
+	position:relative;
+	display:none;
+	margin:0;
+}
+dl.popup-cell > dt {
+	position:relative;
+	display:block;
+	margin:0;
+	text-decoration:underline;
+}
+
+dl.popup-cell:hover > dd {
+	position:absolute;
+	display:block;
+	border-style:solid;
+	background-color:#fff;
+	margin-left:1em;
+	z-index:+1;
+}
+
+dl.popup-cell:hover > dd > ul {
+	padding:0.3em;
+}
+
+dl.popup-cell:hover > dd > ul > li {
+	display:inline;
+	margin:0 0.1em;
+}
+
+/**
+ * 複数セル選択時のクリップボード代わり
+ * 視覚的には完全に非表示
+ */
+div.excel > div > textarea.clipper {
+  /*
+  position:absolute;
+  left:-100px !important;
+	height:5px !important;
+	width:10px !important;
+	border-width:0 !important;
+	*/
+}
+
+input.auto-complete-input {
+	width:100%;
+	border-style:dashed;
+	border-color:transparent;
+	border-width:1px;
+	outline-style:none;
+	background-color:transparent;
+	overflow:hidden;
+	text-align:right;
+	word-break:keep-all;
+	margin:0;
+	padding:0;
+}
+
+input.auto-complete-input:focus {
+	border-color:transparent transparent #000 transparent;
+}
+
+.suggest {
+	position:absolute;
+	background-color: #FFFFFF;
+	border-style:none;
+	width:13.5em;
+}
+
+.suggest div {
+	z-index:+1;
+	border-style:none;
+	display:block;
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+.suggest div.select { /* キー上下で選択した場合のスタイル */
+	color:#fff;
+	background-color:#36f;
+}
+
+.suggest div.over { /* マウスオーバ時のスタイル */
+	background-color:#9cf;
+}
+

@@ -1,0 +1,92 @@
+@charset "Shift_JIS";
+
+/*
+	各地に分散しがちな、基本配色設定を書き出しておきます
+	適応範囲:サイト全体
+*/
+
+body {
+	color:#000;
+	background-color:#ffffff;
+	
+	/* IE Only */
+	/*scrollbar-base-color:#34025B;
+	scrollbar-arrow-color:#fff;*/
+}
+
+abbr, acronym, del, em, ins, q, span, strong, ruby {
+	border-color:#000;
+}
+
+a,
+a:hover,
+a:active {
+	color:#436CAA;
+	border-color:#436CAA;
+}
+
+a:visited {
+	color:#503F88;
+}
+
+a:hover {
+	border-color:#503F88;
+	text-decoration:underline;
+}
+
+kbd {
+	background-color:#fcf5fc;
+	border-color:#fcf5fc;
+}
+
+/* block attoribute */
+div, p, address,
+table, td, tr, th, ol, ul, nl
+textarea, form, input, button, select,
+dl, dt, dd,
+iframe {
+	border-color:#000;
+}
+
+h {
+	border-color:#000;
+}
+
+blockquote, blockcode {
+	border-color:#e9dcba;
+	background-color:#e9dcba;
+}
+
+ins {
+	border-color:#530292;
+}
+
+table {
+	background-color:transparent;
+	border-width:5px;
+}
+
+textarea, form {
+	background-color:#fff;
+}
+
+input[type="text"],
+input[type="file"],
+input[type="password"] {
+	background-color:#fff;
+	border-width:1px;
+	border-style:inset;
+}
+
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	color:#000;
+	font-style:normal;
+	font-weight:bold;
+	border-style:outset;
+	border-width:1px 2px 2px 1px;
+	border-color:#d3d2d3;
+	background-color:#d3d2d3;
+}

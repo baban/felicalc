@@ -1,0 +1,35 @@
+@charset "Shift_JIS";
+
+/* Googleでの検索である場合に表示 */
+
+a[title="Google"]:before {
+	content:"";
+	vertical-align:top;
+}
+
+/* Wikipediaでの解説である場合に表示 */
+a[title="Wikipedia"]:before {
+	content:url("img/wiki_ico.gif");
+	vertical-align:top;
+}
+
+a[type="application/pdf"]:before {
+	content:"PDF:";
+	border-style:solid;
+}
+
+/* flashメディアへのリンクである場合に表示 */
+a[type="application/x-shockwave-flash"]:before {
+	content:"Flash:";
+	border-style:solid;
+}
+
+/* movieへのリンクである場合に表示 */
+a[type="video/quicktime"],
+a[type="video/mpeg"] {
+}
+
+/* zip圧縮されたファイルの場合に表示します */
+a[type="application/zip"]:after{
+	content:"(zip)";
+}

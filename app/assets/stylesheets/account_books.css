@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+@import url("def/html-default-css1.css");
+@import "def/html-default-css2.css";
+@import url("def/html-color-base.css");
+@import url("excel.css");
+@import url("pattern/progressbar.css");
+@import url("pattern/header.css");
+@import url("pattern/tabpanels.css");
+
+body > h1 {
+	margin:0.2em 0.3em 0.3em 0.3em;
+}
+
+div#content{
+	margin:0 0.5em 1em 0.5em;
+}
+
+.format-view.container th {
+	font-size:0.8em;
+}
+.format-view.container td {
+	font-size:0.7em;
+}
+
+table.excel > tr > th.id-row{
+	width:3.5em;
+	padding:0;
+}
+
+table.excel > tr > th.user-row{
+	width:4em;
+}
+
+table.excel > tr > th.date-row{
+	width:7em;
+}
+
+table.excel > tr > th.usecase-row {
+	width:12em;
+}
+
+table.excel > tr > th.category-row {
+	width:3.5em;
+}
+
+table.excel > tr > th.money-row{
+	width:7em;
+}
+
+table.excel > tr > th.memo-row {
+	width:15em;
+}
+
+table.excel > tr > th.cardtype-row {
+	width:6em;
+}
+
+div#small-help {
+	border-style:solid;
+	margin:1em 0 0 1em;
+	text-align:left;
+	font-size:0.9em;
+}
+
+div#small-help p:before {
+	content:"※";
+	margin-left:0.5em;
+}
+
+div#small-help > *:first-child {
+	margin-top:0.5em;
+}
+
+div#small-help > *:last-child {
+	margin-bottom:0.5em;
+}

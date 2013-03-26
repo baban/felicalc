@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+@import url("def/html-default-css1.css");
+@import "def/html-default-css2.css";
+@import url("def/html-color-base.css");
+@import url("pattern/header.css");
+@import url("pattern/tabpanels.css");
+
+div#content {
+	margin:0 0.5em;
+}
+
+/* ここからログインフォーム部分 */
+h1#login-title {
+	display:none;
+}
+
+div#form-area {
+	width:45%;
+	float:left;
+	clear:none;
+	min-width:14em;
+}
+
+form {
+	border-style:none;
+	font-size:1.0em;
+	margin:3em 0 0 1.5em;
+	max-width:12em;
+}
+
+#service-description {
+	color:green;
+}
+
+#test-account-description {
+	margin:0.8em 0 0 2em;
+	font-size:0.8em;
+}
+
+input[type="text"],
+input[type="password"] {
+	padding:1px;
+	margin:0 0 0 0.9em;
+	border-color:#aeadae;
+	height:1.0em;
+}
+
+form p {
+	margin-bottom:0.2em;
+}
+
+div#username-form {
+	margin:0 0 1em 0;
+}
+
+div#username-form {
+	margin:0 0 1em 0;
+}
+
+p#auto-login-checkbox-form {
+	margin-top:0.9em;
+	font-size:0.9em;
+	text-align:right;
+}
+
+/* loginボタン */
+div#login-submit-button {
+	text-align:right;
+	margin:0.2em 0 0 0;
+}
+
+div#account-request {
+	margin:0.5em 0 0 1.5em;
+}
+
+/* ここから更新履歴表示部分 */
+div#left-area {
+	width:50%;
+	float:right;
+	clear:none;
+}
+
+div#update-history {
+	border-style:dashed;
+	width:95%;
+	height:10em;
+	min-width:15em;
+	margin:8em 0 0 0;
+	overflow-y:scroll;
+	overflow-x:auto;
+	float:left;
+}
+
+div#update-history > h1 {
+	font-size:1.0em;
+	margin:0.1em 0;
+}
+
+div#update-history > ul {
+	margin:0 0.2em;
+	padding:0;
+}
+
+div#update-history > ul > li:before {
+	content:"※";
+}
+
+address#admin-information {
+	position:fixed;
+	right:0.5em;
+	bottom:0.4em;
+	background-color:#fff;
+}

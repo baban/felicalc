@@ -1,0 +1,36 @@
+﻿@charset "UTF-8";
+
+/* プログレスバーその他をまとめるコンテンツボックス */
+div.progressbar-content{
+	width:20em;
+	clear:none;
+}
+
+/* プログレスバー本体 */
+div.progressbar-content > div.progressbar{
+	height:1em;
+	width:15em;
+	border-style:solid;
+	background-color:#eee;
+	margin-left:25px;
+	/*visibility:hidden;*/
+	clear:none;
+}
+/* プログレスバー内側の進行表示部分 */
+div.progressbar > div.progressbar-inner{
+	height:1em;
+	max-width:15em;
+	background-color:#bbb;
+	clear:none;
+}
+/* プログレスバーに表示される読み込み中アイコン */
+div.loading-icon {
+	width:20px;
+	height:20px;
+	border-style:solid;
+	border-color:#ddd;
+	float:left;
+	clear:none;
+	background-image:url('img/loading-icon.gif');
+	visibility:hidden;
+}

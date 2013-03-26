@@ -1,0 +1,184 @@
+@charset "Shift_JIS";
+
+/*
+ブラウザ間の表示差を埋めるための、デフォルトスタイルシート。ちょっと設定しすぎ…
+xhtml1.0, 1.1あたりでDeprecatedのタグ入れない方向で作成
+適用範囲:サイト全体
+CSS2限定設定
+*/
+a, abbr, acronym, dfn, em, q, span, strong, ruby, code, cite,
+ins, del {
+	outline:none 1px #aaa;
+}
+/* ============================
+block elements
+============================ */
+h1, h2, h3, h4, h5, h6,
+div, p, blockquote, pre, code,
+object, map,
+ul, ol, dl, dt, dd, li,
+textarea, form, iframe, select {
+	outline:none 1px #000;
+}
+
+div.section:after {
+	content:" ";
+	display:block;
+	clear:both;
+}
+
+q:before {
+	content:open-quote;
+}
+q:after {
+	content:close-quote;
+}
+
+h1:before, h1:after,
+h2:before, h2:after,
+h3:before, h3:after,
+h4:before, h4:after,
+h5:before, h5:after,
+h6:before, h6:after {
+	margin:0.2em;
+}
+
+pre > code {
+	display:block;
+	border-style:dotted;
+	overflow:auto;
+}
+
+/** ieがまだcss2完全対応でないのでおあずけ */
+code.block{
+	white-space:pre;
+}
+
+blockquote > p {
+	margin:0;
+	padding:0;
+}
+
+ol {
+	list-style-type:decimal;
+}
+
+li {
+	list-style-position:outside;
+}
+
+li:before, 
+dt:before {
+	margin-right:0.2em;
+}
+
+table {
+	border-collapse:separate;
+	border-spacing:1px;
+}
+
+div.table{
+	display:table;
+}
+div.tr{
+	display:table-row;
+	border:3px solid red;
+}
+div.td{
+	display:table-cell;
+}
+
+/* 汎用テキスト要素 */
+
+input[type="checkbox"],
+input[type="radio"] {
+	border-style:none;
+}
+
+input[type="text"],
+input[type="file"] {
+	padding:0.2em;
+	font-size:1.0em;
+}
+
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="file"] {
+	border-style:outset;
+	border-width:0.15em;
+	padding:0 0.2em;
+}
+
+button:active,
+input[type="button"]:active,
+input[type="reset"]:active,
+input[type="submit"]:active {
+	border-style:inset;
+}
+label:after,
+button:after,
+textarea:after,
+input[type="button"]:after,
+input[type="reset"]:after,
+input[type="submit"]:after {
+	content:attr(accesskey);
+}
+
+/*
+ * based upon
+ *  http://www.akatsukinishisu.net/itazuragaki/2001_10.html#ruby_for_Mozilla_3
+ */
+ruby {
+  display:inline-table;
+  text-align:center;
+  white-space:nowrap;
+  text-indent:0;
+  text-align:center;
+  margin: 0; 
+  vertical-align:bottom;
+}
+
+/* ルビベース */
+ruby > rb,　ruby > rbc {
+  display:table-row-group;
+  text-align:center;
+  line-height:90%;
+}
+
+/* 前側ルビテキスト */
+ruby > rt,　ruby > rbc + rtc {
+  display:table-header-group;
+  font-size:70%;
+  line-height:30%;
+  letter-spacing:0;
+  text-align:center;
+}
+
+/* 後側ルビテキスト */
+ruby > rbc + rtc + rtc {
+  display:table-footer-group;
+  font-size:70%;
+  line-height:30%;
+  letter-spacing:0;
+  text-align:center;
+}
+
+/* 複雑ルビテキスト */
+rbc > rb,
+rtc > rt {
+  display:table-cell;
+  letter-spacing:0;
+  text-align:center;
+}
+
+rtc > rt[rbspan] {
+  display:table-caption;
+  text-align:center;
+}
+
+/* ルビ括弧 */
+rp {
+  display:none;
+}

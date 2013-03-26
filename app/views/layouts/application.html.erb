@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
 <head>
-  <title>JpFullstack</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
+  
+  <title>家計簿</title>
+  <%= stylesheet_link_tag "account_books", :media =>"all" %>
+  <%= javascript_include_tag "prototype" %>
+  <%= javascript_include_tag "progressbar" %>
+  <%= javascript_include_tag "coaccess" %>
+  <%= javascript_include_tag "date_format" %>
+  <%= javascript_include_tag "suggest" %>
 </head>
 <body>
 

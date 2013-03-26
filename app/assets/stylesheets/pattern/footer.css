@@ -1,0 +1,98 @@
+@charset "Shift_JIS";
+
+div.footer h2{
+	background-color:#8F78CA;
+	color:#ffffff;
+}
+
+/* Ç±Ç±Ç©ÇÁÇÕäÓëbê›íËÅAòMÇÈÇÕäÎåØ */
+div.footer ul,
+div.footer dl{
+	border-style:none;
+	text-decoration:none;
+	text-align:center;
+	margin:0;
+	padding:0;
+}
+
+div.footer dt,
+div.footer dd	{
+	margin:0;
+	padding:0;
+	text-align:left;
+}
+
+div.footer dd	{
+	padding:0 0.1em 0 0.6em;
+	font-size:0.8em;
+}
+
+div.footer ul a,
+div.footer dl a {
+	text-decoration:none;
+	margin:0;
+}
+
+div.footer h1 {
+	margin:0.2em;
+	padding:0.2em;
+}
+
+div.footer {
+	width:10em;
+	margin:0;
+	padding:0.7em 0.5em;
+	background-color:#EFEAF4;
+}
+
+div.footer ul,
+div.footer dl{
+	border-style:none;
+	text-decoration:none;
+	text-align:center;
+	margin:0;
+	padding:0;
+}
+
+div.footer ul li,
+div.footer dl dt{
+	background-color:#D4CBEB;
+	margin:0.3em 0;
+}
+
+div.footer dt,
+div.footer dd	{
+	margin:0;
+	padding:0;
+	text-align:left;
+}
+
+div.footer dd	{
+	padding:0 0.1em 0 0.6em;
+	font-size:0.8em;
+}
+
+div.footer ul a,
+div.footer dl a {
+	text-decoration:none;
+	margin:0;
+	background-repeat:no-repeat;
+	background-position:bottom right;
+}
+
+div.footer ul a:hover,
+div.footer dl a:hover {
+}
+
+div.footer h2{
+	font-size:1.1em;
+	font-weight:bold;
+	text-align:left;
+	border-width:1px;
+	border-style:solid;
+	font-size:1.1em;
+	font-weight:bold;
+	margin:0.3em 0;
+	padding:0.2em;
+}
+
