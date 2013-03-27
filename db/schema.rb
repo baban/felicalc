@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20130312164220) do
     t.boolean  "comment",         :default => true, :null => false
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+    t.datetime "deleted_at"
   end
 
   add_index "user_profile_visibilities", ["user_profile_id"], :name => "index_user_profile_visibilities_on_user_profile_id"
@@ -94,13 +95,14 @@ ActiveRecord::Schema.define(:version => 20130312164220) do
     t.integer  "recipe_count",  :default => 0,  :null => false
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
+    t.datetime "deleted_at"
   end
 
   add_index "user_profiles", ["user_id"], :name => "index_user_profiles_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "email",                  :default => "",   :null => false
+    t.string   "encrypted_password",     :default => "",   :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -114,8 +116,10 @@ ActiveRecord::Schema.define(:version => 20130312164220) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+    t.datetime "deleted_at"
+    t.boolean  "entry_flg",              :default => true, :null => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
