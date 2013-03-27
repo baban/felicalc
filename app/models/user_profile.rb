@@ -10,11 +10,6 @@ class UserProfile < ActiveRecord::Base
   belongs_to :user
   accepts_nested_attributes_for :user
 
-  validates :nickname,      presence: true
-  validates :birthday,      presence: true
-  validates :prefecture_id, presence: true
-  validates :distinct_id,   presence: true
-
   mount_uploader :image, UserProfileImageUploader
 
   module MailStatus
