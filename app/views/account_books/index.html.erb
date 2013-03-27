@@ -5,18 +5,7 @@
   <%= javascript_include_tag "suggest" %>
 <% end %>
 
-<div id="header">
-  <div id="login-bar">
-    <p>
-      ユーザー名 : <% if logged_in? %><%= @u.login %><% end %>
-      <%= link_to 'ログアウト', logout_path %>
-      <%= link_to 'ヘルプ', :controller=>:help %>
-    </p>
-  </div>
-  
-  <h1><span>Felicalc</span></h1>
-  
-  <dl id="menu">
+<%= content_for :menu_items do %>
     <dt class="menu-item">
       <dl class="menu-item">
         <dt class="menu-item">エクスポート</dt>
@@ -34,10 +23,7 @@
     </dt>
     
     <!-- <dt id="property-page">設定</dt> -->
-  </dl>
-</div>
-
-<div id="content" class="section">
+<% end %>
 
 <div id="trouble-logs-form" class="excel" action="">
   <input type="button" value="←先月" id="get-prev-data" />
@@ -47,9 +33,9 @@
 </div>
 
 <div id="small-help">
-	<p>行の追加 :「追加 &gt;&gt;」行に追記</p>
-	<p>行の削除 : 消したい行の「機能」カラムを選択</p>
-	<p>セルの自由編集 : F2キー</p>
+  <p>行の追加 :「追加 &gt;&gt;」行に追記</p>
+  <p>行の削除 : 消したい行の「機能」カラムを選択</p>
+  <p>セルの自由編集 : F2キー</p>
 </div>
 
 <script type="text/javascript">
@@ -354,5 +340,3 @@ Event.observe( window, 'load', function(e){
   });
 } );
 </script>
-
-</div><!-- div:content -->

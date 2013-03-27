@@ -64,6 +64,8 @@ JpFullstack::Application.routes.draw do
 
   resource(:profile){ collection { get :delete_confirm } }
   resources(:mypage, only:[:index]) {}
+  resources(:account_books, only:[:index]) {}
+  resources(:account_statistics, only:[:index]) {}
 
   # See how all your routes lay out with "rake routes"
 

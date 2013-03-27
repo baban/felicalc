@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AccountBooksController < ApplicationController
   # コンテンツ
   def index
