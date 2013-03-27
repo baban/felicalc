@@ -8,10 +8,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_omniuser, :login?
 
-  def auth
-    @user = current_user
-  end
-
   private
   # Omniauthでのログイン状況確認
   def current_omniuser
@@ -20,5 +16,9 @@ class ApplicationController < ActionController::Base
 
   def login?
     !!current_user
+  end
+
+  def member_filter
+    return redirect_to "/user/sign_in" unless login?
   end
 end

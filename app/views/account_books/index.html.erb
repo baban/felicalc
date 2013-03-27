@@ -19,9 +19,8 @@
       </dl>
     </dt>
     <dt class="menu-item" id="statistic-page">
-      <a id="statistic-link" href="<%= %Q[#{account_statistics_path}/index/#{(DateTime.now).at_beginning_of_month.strftime('%Y%m%d')}-#{(DateTime.now).at_end_of_month.strftime('%Y%m%d')}] %>/">統計</a>
+      <%=link_to "統計", { controller:"account_statistics", action:"index", day:"#{(DateTime.now).at_beginning_of_month.strftime('%Y%m%d')}-#{(DateTime.now).at_end_of_month.strftime('%Y%m%d')}" }, id:"statistic-link" %>
     </dt>
-    
     <!-- <dt id="property-page">設定</dt> -->
 <% end %>
 

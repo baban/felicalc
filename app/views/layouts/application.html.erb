@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
   
-  <title>家計簿</title>
+  <title>Felicalc</title>
   <%= stylesheet_link_tag "common", :media =>"all" %>
   <%= stylesheet_link_tag params[:controller], :media =>"all" %>
   <%= javascript_include_tag "prototype" %>
@@ -15,20 +15,15 @@
 
 <div id="header">
   <div id="login-bar">
-    <p>
-      <% unless user_signed_in? %>
-        <%= link_to "ログイン", new_user_session_url %>
-        <%= link_to "登録", new_user_registration_url %>
-        <%= link_to "ヘルプ", "" %>
-      <% else %>
-        ユーザー名 : <%= current_user.profile.nickname %>
-        <%=form_for :device, url: destroy_user_session_url, method:"DELETE" do |f| %>
-          <%= f.submit t(:sign_out, scope:"views.header"), id:"signout_button" %>
-        <% end %>
-        <%= link_to "ログアウト", "" %>
-        <%= link_to "ヘルプ", "" %>
-      <% end %>
-    </p>
+    <% unless user_signed_in? %>
+      <%= link_to "ログイン", new_user_session_url %>
+      <%= link_to "登録", new_user_registration_url %>
+      <%= link_to "ヘルプ", "" %>
+    <% else %>
+      ユーザー名 : <%= current_user.profile.nickname %>
+      <%=form_for :device, url: destroy_user_session_url, method:"DELETE" do |f| %><%= f.submit "ログアウト", id:"signout_button" %><% end %>
+      <%= link_to "ヘルプ", "" %>
+    <% end %>
   </div>
   
   <h1><%=link_to "Felicalc", "/" %></h1>

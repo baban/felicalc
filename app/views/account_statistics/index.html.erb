@@ -1,34 +1,18 @@
-<head>
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
-  
-  <title><%= SERVICE_NAME %>: 統計</title>
+<% content_for :js_after do %>
   <%= stylesheet_link_tag "account_books", :media =>:all %>
   <%= stylesheet_link_tag "account_statistics", :media =>:all %>
   <%= javascript_include_tag "FusionCharts" %>
-</head>
-<body>
+<% end %>
 
-<div id="header">
-  <div id="login-bar">
-    <p>
-      ユーザー名 : <% if logged_in? %><%= @u.login %><% end %>
-      <%= link_to 'ログアウト', logout_path %>
-      <%= link_to 'ヘルプ', :controller=>:help %>
-    </p>
-  </div>
-  
-  <h1><span>Felicalc</span></h1>
-  
+<% content_for :menu_list do %>
   <dl id="menu">
-    <dt id="account_books-page"><%= link_to '帳簿', account_books_path %></dt>
+    <dt id="account_books-page"><%= link_to "帳簿", account_books_path %></dt>
     <dt id="statistic-page">
-      <a id="statistic-link" href="<%= %Q[#{account_statistics_path}/index/#{@start_date.at_beginning_of_month.strftime('%Y%m%d')}-#{@end_date.at_end_of_month.strftime('%Y%m%d')}] %>/">統計</a>
+      <%=link_to "統計", { controller:"account_statistics", action:"index", day:"#{@start_date.at_beginning_of_month.strftime('%Y%m%d')}-#{@end_date.at_end_of_month.strftime('%Y%m%d')}" }, id:"statistic-link" %>
     </dt>
     <!-- <dt id="property-page">設定</dt> -->
   </dl>
-</div>
+<% end %>
 
 <h1><%= @start_date.strftime("%Y/%m/%d") %> ～ <%= @end_date.strftime("%Y/%m/%d") %>の集計</h1>
 

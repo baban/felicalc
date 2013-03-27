@@ -60,12 +60,11 @@ JpFullstack::Application.routes.draw do
   #root to:"top#index"
   root to:"account_books#index"
   devise_for :user
-  get "top/index", as:'user_root'
 
   resource(:profile){ collection { get :delete_confirm } }
-  resources(:mypage, only:[:index]) {}
-  resources(:account_books, only:[:index]) {}
-  resources(:account_statistics, only:[:index]) {}
+  resources(:mypage, only:[:index])
+  resources(:account_books) { collection { get :get_row, :update_row, :delete_row, :export, :suggest } }
+  resources(:account_statistics, only:[:index])
 
   # See how all your routes lay out with "rake routes"
 

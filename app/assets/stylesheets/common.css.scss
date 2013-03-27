@@ -16,6 +16,22 @@ body > h1 {
   margin:0 0.5em 1em 0.5em;
 }
 
+#login-bar {
+  text-align:right;
+  form {
+    background-color:transparent;
+    border-style:none;
+    width:auto;
+    display:inline;
+    input { 
+      color:white;
+      background-color:transparent;
+      border-style:none;
+      display:inline;
+    }
+  }
+}
+
 .alert {
   color:red;
 }
