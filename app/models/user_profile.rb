@@ -1,8 +1,6 @@
 # encoding: utf-8
 
 class UserProfile < ActiveRecord::Base
-  # users table and user_profiles table are saved data to another database
-  establish_connection "cook24_users" if [:staging,:production].include?(Rails.env.to_sym)
   default_scope order: 'id DESC'
 
   acts_as_paranoid

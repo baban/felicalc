@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class CreateCategorySuggests < ActiveRecord::Migration
   def self.up
     create_table :category_suggests do |t|

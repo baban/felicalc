@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class User < ActiveRecord::Base
-  establish_connection "cook24_users" if [:staging,:production].include?(Rails.env.to_sym)
   default_scope order: 'id DESC'
 
   acts_as_paranoid
