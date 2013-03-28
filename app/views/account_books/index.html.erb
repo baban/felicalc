@@ -73,8 +73,8 @@ coAccess.prototype.filter = function( row ){
  * @param {String} format 欲しい拡張子
  */
 coAccess.prototype.request = function( option, format ){
-  var path = "<%= account_books_path %>"+'/get_row/1';
-  
+  var path = "<%= account_books_path %>"+'/get_row/';
+/*  
   // 拡張子ごとに問い合わせ先を変更
   if( 'xsl'==format ) path = "<%= account_books_path %>"+'/export/1';
   var self = this;
@@ -108,6 +108,7 @@ coAccess.prototype.request = function( option, format ){
       self.setTable( o );
     }
   } );
+*/
 }
 
 /**
@@ -135,59 +136,58 @@ AccessHtmlHelper.helpers.idshow = {
  * idshowは、表示だけで編集を禁止する場合の処理
  */
 AccessHtmlHelper.helpers['auto-complete'] = function(){
-	var list = [];
-	var path = "<%= url_for :action=>:suggest, :id=>1 %>";
-	
-	new Ajax.Request( path, {
-		method: 'post',
-		onComplete: function(req){
-			var o = eval('('+req.responseText+')');
-			list = o;
-		}
-	} );
-	
-	var minp=document.createElement('input');
-	minp.type='text';
-	minp.className='auto-complete-input';
-	minp.autecomplete='off';
-	minp.name="pattern";
-	
-	function inper(v,self){
-		var inp=minp.cloneNode(true);
-		inp.value=v;
-		// オートコンプリートを発動
-		inp.onfocus=function(e){
-				new Suggest.Local( inp, div, list, self, 
-				{
-					dispMax: 3,
-					interval: 100,
-					onSelect:function(index){
-						inp.value = list[index];
-						var p = self.selectPoint;
-						self.table[p.y-1][self.tableHeader[p.x].name] = inp.value;
-					}
-				});
-		}
-		inp.onkeydown=function(e){
-			// Enterキーを押したときは脱出
-			if( 13 != e.keyCode ) return;
-			var p = self.selectPoint;
-			self.guicancel( false );
-			self.table[p.y-1][self.tableHeader[p.x].name] = inp.value;
-		}
-		var div = document.createElement('div');
-		div.className='suggest';
-		
-		return [inp,div];
-	}
-	
-	return {
-		create:function( row, colInfo, self ){
-			return inper(row[colInfo.name],self);
-		},
-		get:function( d ) { return d; },
-		set:function( el, d ){ return undefined; }
-	}
+  var list = [];
+  var path = "<%= url_for :action=>:suggest %>";
+  /*
+  new Ajax.Request( path, {
+    method: 'post',
+    onComplete: function(req){
+      var o = eval('('+req.responseText+')');
+      list = o;
+    }
+  } );
+  */
+  var minp=document.createElement('input');
+  minp.type='text';
+  minp.className='auto-complete-input';
+  minp.autecomplete='off';
+  minp.name="pattern";
+
+  function inper(v,self){
+    var inp=minp.cloneNode(true);
+    inp.value=v;
+    // オートコンプリートを発動
+    inp.onfocus=function(e){
+      new Suggest.Local( inp, div, list, self, 
+        {
+          dispMax: 3,
+          interval: 100,
+          onSelect:function(index){
+            inp.value = list[index];
+            var p = self.selectPoint;
+            self.table[p.y-1][self.tableHeader[p.x].name] = inp.value;
+          }
+        });
+      }
+      inp.onkeydown=function(e){
+        // Enterキーを押したときは脱出
+        if( 13 != e.keyCode ) return;
+        var p = self.selectPoint;
+        self.guicancel( false );
+        self.table[p.y-1][self.tableHeader[p.x].name] = inp.value;
+      }
+      var div = document.createElement('div');
+      div.className='suggest';
+      return [inp,div];
+    }
+
+  return {
+    create:function( row, colInfo, self ){
+      return inper(row[colInfo.name],self);
+    },
+    get:function( d ) { return d; },
+    set:function( el, d ){ return undefined; }
+  }
 }
 
 /**
@@ -213,7 +213,7 @@ coAccess.prototype.flush = function( pnt ){
  */
 coAccess.prototype.printotal = function(){
   var tbl=this.table, sum=0;
-  for( var i=0; i<tbl.length; i++ ){
+  for( var i=0; i < tbl.length; i++ ){
     var n=parseInt( tbl[i]['money'] );;
     sum += (n?n:0);
   }
@@ -230,14 +230,14 @@ AccountBooks.prototype.update = function( y, is_not_update ){
   if( !row['money'] ) row['money'] = 0; // 空のセルなら時間を埋める
   if( !row['date'] ) row['date'] = new Date().toString("Y-m-d"); // 空のセルなら時間を埋める
   var path = "<%= account_books_path %>";
-  new Ajax.Request( path+'/update_row/'+(('*'==row.id)?'add_row':row.id), {
+  new Ajax.Request( path+'/update_row/', {
     method: 'post',
-    parameters: row,
+    parameters: { account_books: row },
     onComplete: function(req){
       if(is_not_update) return;
       
       var o = eval('('+req.responseText+')');
-      // データが新しい場合は、列に追加&テーブル更新
+      // データが新しい場合は、列に追加＆テーブル更新
       self.addTable([o]);
       self.flushRow( y, self.selectPoint, [o], (prow.id=='*') );
       

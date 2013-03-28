@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class AccountBook < ActiveRecord::Base
   
   # 検索条件を示したパラメーターの値をチェックする
@@ -31,7 +33,7 @@ class AccountBook < ActiveRecord::Base
     category = CategorySuggest.find_category(params['usecase']) if !params['category'] or params['category'].to_i == 0
     params['category'] = category.m_category_id if category
     
-    o = AccountBook.first( :conditions=>['id = ? and user_id = ?', params['id'], user_id ] )
+    o = AccountBook.where( :id => params['id'], :user_id => user_id ).first
     params.delete(:id)
     if !o
       o = AccountBook.create( params )

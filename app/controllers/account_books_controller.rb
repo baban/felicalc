@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class AccountBooksController < ApplicationController
-  before_filter :member_filter
+  before_filter :member_filter, except:[:get_row,:update_row,:delete_row]
 
   # コンテンツ
   def index
@@ -71,19 +71,18 @@ class AccountBooksController < ApplicationController
   
   # 送られてきた列情報を該当するidの列に反映する
   def update_row
-    tprms = params
-    tprms.delete(:action)
-    tprms.delete(:controller)
-    
-    @account_book = AccountBook.update_row( @u.id, tprms )
+    tprms = params[:account_books]
+    params[:user_id] = 1
+    @account_book = AccountBook.update_row( current_user.id, tprms )
+    # @account_book = AccountBook.update_row( params[:user_id], tprms )
     
     respond_to {|fmt| fmt.json { render :json => @account_book } }
   end
   
   # 指定れた行の削除
   def delete_row
-    uid = @u.id
-    return nil if !params[:id]
+    uid = current_user.id
+    return if !params[:id]
     @row = AccountBook.delete_row( uid, params[:id] )
     respond_to {|fmt| fmt.json { render :json => @row } }
   end
