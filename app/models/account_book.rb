@@ -25,16 +25,16 @@ class AccountBook < ActiveRecord::Base
   # [return] 行を更新する
   def self.update_row( user_id, params, mode = :update )
     mode = (mode != :update) ? :add : :update
-    
-    params['user_id'] = user_id
-    params['date'] = DateTime.now if :add == mode
+
+    params[:user_id] = user_id
+    params[:date] = DateTime.now if params[:date].blank? or :add == mode
     
     # カテゴリ未指定の場合は出来るだけ自動補完
     category = CategorySuggest.find_category(params['usecase']) if !params['category'] or params['category'].to_i == 0
     params['category'] = category.m_category_id if category
     
     o = AccountBook.where( :id => params['id'], :user_id => user_id ).first
-    params.delete(:id)
+    params.keys.each { |k| [:date,:user_id,:category,:memo,:money,:usecase].include?(k.to_sym) || params.delete(k) }
     if !o
       o = AccountBook.create( params )
     else
@@ -43,6 +43,7 @@ class AccountBook < ActiveRecord::Base
     o
   rescue => e
     Rails.logger.error "update_row data insert error"
+    Rails.logger.error e.message
   end
   
   # 指定された行を削除する

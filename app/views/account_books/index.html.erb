@@ -55,7 +55,7 @@ var tableInfo = [
  * @return {Hash} 列ごとの情報の連想配列
  */
 coAccess.prototype.filter = function( row ){
-  var r = row['account_book'];
+  var r = row;
   var nrow = {};
   this.tableHeader.each( function(colInfo){
     try{
@@ -98,16 +98,14 @@ coAccess.prototype.request = function( option, format ){
   if( option && option.hasOwnProperty('sort') ) this.flushSortTable( option.sort );
   
   this.pgbar.show();  // プログレスバー
-/* 
   new Ajax.Request( path, {
     method: 'post',
-    parameters: { conditions : cond }, 
+    parameters: { conditions : cond, authenticity_token: "<%= form_authenticity_token %>" },
     onComplete: function(req){
       var o = eval('('+req.responseText+')');
       self.setTable( o );
     }
   } );
-*/
 }
 
 /**
@@ -229,9 +227,11 @@ AccountBooks.prototype.update = function( y, is_not_update ){
   if( !row['money'] ) row['money'] = 0; // 空のセルなら時間を埋める
   if( !row['date'] ) row['date'] = new Date().toString("Y-m-d"); // 空のセルなら時間を埋める
   var path = "<%= account_books_path %>";
+  row["authenticity_token"]="<%= form_authenticity_token %>"
+  console.log( row );
   new Ajax.Request( path+'/update_row/', {
     method: 'post',
-    parameters: { account_books: row },
+    parameters: row,
     onComplete: function(req){
       if(is_not_update) return;
       
@@ -254,7 +254,7 @@ AccountBooks.prototype.deleteRow = function( y ){
   var path = "<%= account_books_path %>";
   new Ajax.Request( path+'/delete_row/'+y, {
     method: 'post',
-    parameters:{ id:y },
+    parameters:{ id: y, authenticity_token: "<%= form_authenticity_token %>" },
     onComplete: function(req){ self.request(self); }
   } );
 }

@@ -59,23 +59,16 @@ class AccountBooksController < ApplicationController
   
   # 指定された条件の列をすべて取り出して、jsonで返す
   def get_row
-    if params[:conditions]
-      params[:conditions]+= " and user_id='#{@u.id}' "
-    else
-      params[:conditions] = " user_id='#{@u.id}' "
-    end
-    @account_books = AccountBook.all( :conditions => params[:conditions] )
+    @account_books = AccountBook.where( user_id: current_user.id ).where( params[:conditions] ).to_a
     
     respond_to { |fmt| fmt.json { render :json => @account_books } }
   end
   
   # 送られてきた列情報を該当するidの列に反映する
   def update_row
-    tprms = params[:account_books]
-    params[:user_id] = 1
+    tprms = params
     @account_book = AccountBook.update_row( current_user.id, tprms )
-    # @account_book = AccountBook.update_row( params[:user_id], tprms )
-    
+    logger.info @account_book.inspect
     respond_to {|fmt| fmt.json { render :json => @account_book } }
   end
   
