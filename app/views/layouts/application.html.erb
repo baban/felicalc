@@ -14,6 +14,8 @@
 <body>
 
 <div id="header">
+  <h1><%=link_to "Felicalc", "/" %></h1>
+
   <div id="login-bar">
     <% unless user_signed_in? %>
       <%= link_to "ログイン", new_user_session_url %>
@@ -24,9 +26,7 @@
       <%=form_for :device, url: destroy_user_session_url, method:"DELETE" do |f| %><%= f.submit "ログアウト", id:"signout_button" %><% end %>
       <%= link_to "ヘルプ", "" %>
     <% end %>
-  </div>
-  
-  <h1><%=link_to "Felicalc", "/" %></h1>
+  </div>  
   
   <dl id="menu"><%= yield :menu_items %></dl>
 </div>

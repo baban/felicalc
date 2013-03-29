@@ -2,7 +2,6 @@
 
 div#header {
   background-color:#8e05ce;
-  background-image:url("../img/titie-logo.png");
   background-repeat:no-repeat;
   
   color:white;
@@ -10,16 +9,25 @@ div#header {
   min-height:92px;
   margin:0 0 0.5em 0;
   padding:0 0 0.5em 0;
-}
-
-div#header a{
-  color:white;
-}
-
-div#header h1{
-  margin:0 0.5em;
-  height:40px;
-  visibility:hidden;
+  a {
+    color:white;
+  }
+  h1 {
+    width:203px;
+    height:68px;
+    margin:0;
+    padding:0;
+    float:left;
+  }
+  h1 > a {
+    background-image:url("../img/titie-logo.png");
+    display:block;
+    float:left;
+    width:203px;
+    height:68px;
+    color:transparent;
+    margin:0 0.5em;
+  }
 }
 
 dl#menu {
@@ -90,14 +98,28 @@ dd.menu-item > dl.menu-item > dt.menu-item {
   margin:0.3em 0 0.3em 0;
 }
 
-div#login-bar p {
+#login-bar {
   text-align:right;
   font-size:0.9em;
-  margin:0 0.5em 0.1em 0;
+  text-align:right;
+  float:right;
+  clear:none;
+  display:block;
+  margin:0 0.5em 0.1em 300px;
   padding:0.3em 0.2em 0 0;
   height:20px;
+  form {
+    background-color:transparent;
+    border-style:none;
+    text-decoration:underline;
+    width:auto;
+    display:inline;
+    input { 
+      color:white;
+      background-color:transparent;
+      border-style:none;
+      display:inline;
+    }
+  }
 }
 
-#signout_button {
-  text-decoration:underline;
-}

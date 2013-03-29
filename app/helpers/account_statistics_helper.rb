@@ -17,7 +17,7 @@ module AccountStatisticsHelper
     h = Hash[*arr.flatten]
     sum = xml_data.map{ |data| data.money }.sum
     
-    data = xml_data.enum_with_index.map do |data,idx|
+    data = xml_data.map.with_index do |data,idx|
       "<tr><th>#{idx+1}</th><th>#{h[data.category.to_i]}</th><td>#{data.money}</td><td>#{ sprintf('%.02f', data.money.to_f*100/sum.to_f)}</td></tr>"
     end.join("\n")
     
