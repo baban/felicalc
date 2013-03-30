@@ -1,20 +1,20 @@
 development:
   adapter: mysql2
-  database: flextures_dev
+  database: felicalc
   username: root
   password: root
   host: localhost
 
 test:
   adapter: mysql2
-  database: flextures_test 
+  database: felicalc_test 
   username: root
   password: root
   host: localhost
 
 production:
   adapter: mysql2
-  database: flextures
+  database: felicalc
   username: root
   password: root
   host: localhost
