@@ -65,7 +65,7 @@ JpFullstack::Application.routes.draw do
   resources(:mypage, only:[:index])
   resources(:account_books) {
     collection {
-      get :export
+      get  :export
       post :get_row, :update_row, :delete_row, :suggest
     }
   }

@@ -1,8 +1,6 @@
 # encoding: utf-8
 
 class AccountBooksController < ApplicationController
-  before_filter :member_filter, except:[:get_row,:update_row,:delete_row]
-
   # コンテンツ
   def index
   end

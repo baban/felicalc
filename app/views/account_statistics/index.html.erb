@@ -4,14 +4,12 @@
   <%= javascript_include_tag "FusionCharts" %>
 <% end %>
 
-<% content_for :menu_list do %>
-  <dl id="menu">
-    <dt id="account_books-page"><%= link_to "帳簿", account_books_path %></dt>
-    <dt id="statistic-page">
-      <%=link_to "統計", { controller:"account_statistics", action:"index", day:"#{@start_date.at_beginning_of_month.strftime('%Y%m%d')}-#{@end_date.at_end_of_month.strftime('%Y%m%d')}" }, id:"statistic-link" %>
-    </dt>
-    <!-- <dt id="property-page">設定</dt> -->
-  </dl>
+<% content_for :menu_items do %>
+  <dt id="account_books-page"><%= link_to "帳簿", account_books_path %></dt>
+  <dt id="statistic-page">
+    <%=link_to "統計", { controller:"account_statistics", action:"index", day:"#{@start_date.at_beginning_of_month.strftime('%Y%m%d')}-#{@end_date.at_end_of_month.strftime('%Y%m%d')}" }, id:"statistic-link" %>
+  </dt>
+  <!-- <dt id="property-page">設定</dt> -->
 <% end %>
 
 <h1><%= @start_date.strftime("%Y/%m/%d") %> ～ <%= @end_date.strftime("%Y/%m/%d") %>の集計</h1>
