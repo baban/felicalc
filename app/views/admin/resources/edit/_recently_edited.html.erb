@@ -1,0 +1,8 @@
+<% if (items = @resource.limit(10)).any? %>
+  <h3>Edited Recently</h3>
+  <ul>
+    <% items.each do |item| %>
+      <li><%= link_to item.to_label, :action => 'edit', :id => item %></li>
+    <% end %>
+  </ul>
+<% end %>

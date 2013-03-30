@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+@import url("def/html-default-css1");
+@import "def/html-default-css2";
+@import url("def/html-color-base");
+@import url("excel");
+@import url("pattern/progressbar.css");
+@import url("pattern/header");
+@import url("pattern/tabpanels");
+
+body > h1 {
+  margin:0.2em 0.3em 0.3em 0.3em;
+}
+
+#content {
+  margin:0 0.5em 1em 0.5em;
+}
+
+.alert {
+  color:red;
+}
+
+.notice {
+  color:green;
+}

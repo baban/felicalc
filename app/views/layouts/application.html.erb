@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
+  
+  <title>Felicalc</title>
+  <%= stylesheet_link_tag "common", :media =>"all" %>
+  <%= stylesheet_link_tag params[:controller], :media =>"all" %>
+  <%= javascript_include_tag "prototype" %>
+  <%= yield :js_after %>
+</head>
+<body>
+
+<div id="header">
+  <h1><%=link_to "Felicalc", "/" %></h1>
+
+  <div id="login-bar">
+    <% unless user_signed_in? %>
+      <%= link_to "ログイン", new_user_session_url %>
+      <%= link_to "登録", new_user_registration_url %>
+      <%= link_to "ヘルプ", "" %>
+    <% else %>
+      ユーザー名 : <%= current_user.profile.nickname %>
+      <%=form_for :device, url: destroy_user_session_url, method:"DELETE" do |f| %><%= f.submit "ログアウト", id:"signout_button" %><% end %>
+      <%= link_to "ヘルプ", "" %>
+    <% end %>
+  </div>  
+  
+  <dl id="menu"><%= yield :menu_items %></dl>
+</div>
+
+<% if flash[:notice] %><div class="notice"><%= flash[:notice] %></div><% end %>
+<% if flash[:alert]  %><div class="alert"><%=  flash[:alert]  %></div><% end %>
+
+<div id="content">
+  <%= yield %>
+</div>
+
+</body>
+</html>

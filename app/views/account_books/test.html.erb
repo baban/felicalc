@@ -1,0 +1,424 @@
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript;charset=UTF-8" />
+	
+	<title>AccountBooks: <%= controller.action_name %></title>
+	<%= stylesheet_link_tag "account_books", :media =>"all" %>
+	<%= javascript_include_tag "prototype" %>
+	<%= javascript_include_tag "progressbar" %>
+	<%= javascript_include_tag "coaccess" %>
+	<%= javascript_include_tag "date_format" %>
+	<%= javascript_include_tag "itcoaccess" %>
+	<%= javascript_include_tag "yui/build/yahoo-dom-event/yahoo-dom-event" %>
+	<%= javascript_include_tag "yui/build/logger/logger-min" %>
+	<%= javascript_include_tag "yui/build/yuitest/yuitest-min" %>
+</head>
+<body>
+
+<p style="color: green"><%= flash[:notice] %></p>
+<script type="text/javascript" src=".js"></script>  
+<script type="text/javascript" src=".js"></script>  
+
+
+<div id="login-bar">
+	<p>
+		User:<% if logged_in? %><%= current_user.login %><% end %>
+		<%= link_to 'signup', signup_path %>
+		<%= link_to 'login', login_path %>
+		<%= link_to 'logout', logout_path %>
+		<a href="/files/help.html">Help</a>
+	</p>
+</div>
+
+
+<h1>Felicalc</h1>
+
+
+<div id="trouble-logs-form" class="excel" action="">
+	<input type="button" value="←先月" id="get-prev-data" />
+	<input type="button" value="今月" id="get-current-data" />
+	<input type="button" value="来月→" id="get-next-data" />
+	<p><label for="total-value">合計:</label><input type="text" value="" id="total-value" name="total-value" size="20" /></p>
+</div>
+
+<%=
+#link_to 'New account_book', new_account_book_path
+%>
+
+
+<script type="text/javascript">
+var tableInfo = [
+	{ name:'id', type:'show', className:'id-row', title:'ID' },
+	{ name:'date', type:'datetime', className:'date-row', title:'日時', option:{ format:'Y-m-d' } },
+	{ name:'money', type:'number', className:'money-row', title:'支払金額' },
+	{ name:'usecase', type : 'text', className:'usecase-row', title:'用途' },
+	{ name:'memo', type : 'text', className:'memo-row', title:'備考' },
+	{ name:'cardtype', type:'text', className:'cardtype-row', title:'カード' }
+	//{ name:'user', type:'show', className:'user-row', title:'ユーザー' }
+];
+
+
+/**
+ * 列ごとに、フィルターをかけて、表示に必要な情報のみを取り出す
+ * @param {Hash} row １列分の情報
+ * @return　{Hash} 列ごとの情報の連想配列
+ */
+coAccess.prototype.filter = function( row ){
+	var r = row['account_book'];
+	var nrow = {};
+	this.tableHeader.each( function(colInfo){
+		try{
+			var d = r.hasOwnProperty(colInfo.name) ? r[colInfo.name] : '';
+			// なぜかここでエラーを出して停止
+			nrow[colInfo.name] = d;
+		}catch(e){}
+	} );
+	return nrow;
+}
+
+/**
+ * リクエスト処理を行います
+ */
+coAccess.prototype.request = function( option ){
+	var path = "<%= account_books_path %>"+'/get_row/1';
+	var self = this;
+	// 検索条件式を作成
+	function toCondition( o ){
+		var h = AccessHtmlHelper.helper(o.type);
+		var v = h.get( o.value );
+		var s = o.name +' '+ o.expression +' '+ "'"+v+"'";
+		return s;
+	}
+	//option['user']='baban';
+	// 検索条件の変更
+	if( option && option.hasOwnProperty('search') ) this.flushSerchTable( option.search );
+	
+	// 検索条件式を作成
+	var os = this.search.collect(toCondition);
+	var cond='';
+	for( var i=0; i<os.length; i++ ){
+		cond += os[i];
+		if( i!=(os.length-1) ) cond  += ' '+this.search[i].join+' ';
+	}
+	// ソート条件を指定
+	this.flushSortTable( [{ name:'id', order:'asc' }] );
+	
+	this.pgbar.show();	// プログレスバー
+	
+	new Ajax.Request( path, {
+		method: 'post',
+		parameters: { conditions : cond }, 
+		onComplete: function(req){
+			var o = eval('('+req.responseText+')');
+			self.setTable( o );
+		}
+	} );
+}
+
+/**
+ * 合計額表示部分
+ */
+coAccess.prototype.printotal = function(){
+	var tbl=this.table, sum=0;
+	for( var i=0; i<tbl.length; i++ ){
+		var n=parseInt( tbl[i]['money'] );;
+		sum += (n?n:0);
+	}
+	$('total-value').value = sum;
+}
+
+/**
+ * 障害管理表を管理する表クラス
+ * coAccessから継承して、Access風のインターフェースを実現します
+ */
+function AccountBooks(){
+	this.tableHeader = tableInfo;
+}
+AccountBooks.prototype = new coAccess('trouble-logs-form',tableInfo);
+
+/**
+ * 指定した行をアップデートします
+ * @param int y 行番号
+ */
+AccountBooks.prototype.update = function( y ){
+	var self = this;
+	var row = this.table[y-1];
+	if( !row['date'] ) row['date'] = self.setCell( 2, y, new Date() );	// 空のセルなら時間を埋める
+	
+	var path = "<%= account_books_path %>";
+	new Ajax.Request( path+'/update_row/'+(('*'==row.id)?'add_row':row.id), {
+		method: 'post',
+		parameters:row,
+		onComplete: function(req){
+			var o = eval('('+req.responseText+')');
+			self.addTable( [o] );
+			// データが新しい場合は、列に追加&テーブル更新
+			self.flushRow( y, self.selectPoint, [o] );
+			self.printotal();
+		}
+	} );
+}
+
+// GUIへの機能の追加処理
+var tblogTbl;
+Event.observe( window, 'load', function(e){
+	
+	tblogTbl = new AccountBooks();
+	(function(){
+		tblogTbl.flush();
+	})();
+	
+	var testLogger = new YAHOO.tool.TestLogger( 'logger' );
+	var TestRunner = YAHOO.tool.TestRunner;
+	var Assert = YAHOO.util.Assert;
+
+	// ここからテストケース
+	var stringTest = new YAHOO.tool.TestCase({
+		name: "文字列系の拡張テスト",
+		testStringToMatrix:function() {
+			var lines = "aaaa".toMatrix();
+			Assert.areEqual('aaaa', lines[0][0] );
+			var lines = "aaaa\tbbbb".toMatrix();
+			Assert.areEqual('bbbb', lines[0][1] );
+			var lines = "aaaa\tbbbb\n".toMatrix();
+			Assert.areEqual('bbbb', lines[0][1] );
+		},
+		testStringToMatrix2:function() {
+			var lines = "aaaa\n".toMatrix();
+			Assert.areEqual( 1, lines.length );
+			var lines = "aaaa\tbbb\n".toMatrix();
+			Assert.areEqual( 1, lines.length );
+			var lines = "aaaa\tbbb\nccc".toMatrix();
+			Assert.areEqual( 2, lines.length );
+		}
+	});
+	TestRunner.add(stringTest);  
+	
+	var oTest = new YAHOO.tool.TestCase({
+		name: "日付フォーマットの変換方法 が正しいか",  
+		testDateHtmlHelper: function() {
+			var h = AccessHtmlHelper.helper( 'datetime', { format:'Y-m-d' } );
+			Assert.areEqual('2010-08-04 00:00:00', h.get( '2010-08-04' ) );
+			Assert.areEqual('2010-01-01 00:00:00', h.get( '2010-01-01' ) );
+			Assert.areEqual('2010-01-28 00:00:00', h.get( '2010-01-28' ) );
+			Assert.areEqual('2010-02-01 00:00:00', h.get( '2010-02-01' ) );
+			Assert.areEqual('2010-02-28 00:00:00', h.get( '2010-02-28' ) );
+			Assert.areEqual('2010-03-01 00:00:00', h.get( '2010-03-01' ) );
+			Assert.areEqual('2010-03-28 00:00:00', h.get( '2010-03-28' ) );
+		},
+		testDateHtmlHelperForEU: function() {
+			var h = AccessHtmlHelper.helper( 'datetime', { format:'Y-m-d' } );
+			Assert.areEqual('2010-08-04 00:00:00', h.get( '2010.08.04' ) );
+			Assert.areEqual('2010-01-01 00:00:00', h.get( '2010.01.01' ) );
+			Assert.areEqual('2010-01-28 00:00:00', h.get( '2010.01.28' ) );
+			Assert.areEqual('2010-02-01 00:00:00', h.get( '2010.02.01' ) );
+			Assert.areEqual('2010-02-28 00:00:00', h.get( '2010.02.28' ) );
+			Assert.areEqual('2010-03-01 00:00:00', h.get( '2010.03.01' ) );
+			Assert.areEqual('2010-03-28 00:00:00', h.get( '2010.03.28' ) );
+		},
+		// 日の最初を指定する
+		testBegginingOfDay: function() {  
+			var d = new Date();
+			Assert.areEqual( '00:00:00', d.beginningOfDay().toString('H:i:s') );
+		},
+		// 月の最初を指定する
+		testBegginingOfMonth: function() {  
+			var d = new Date();
+			Assert.areEqual( '01 00:00:00', d.beginningOfMonth().toString('d H:i:s') );
+		},
+		// 年の最初を指定する
+		testBegginingOfYear: function() {  
+			var d = new Date();
+			Assert.areEqual( '01-01 00:00:00', d.beginningOfYear().toString('m-d H:i:s') );
+		},
+		// 日の最初を指定する
+		testEndOfDay: function() {  
+			var d = new Date();
+			Assert.areEqual( '23:59:59', d.endOfDay().toString('H:i:s') );
+		},
+		// 月の最初を指定する
+		testEndOfMonth: function() {  
+			var d = new Date(); // 2011年4月は30日まで
+			d.setFullYear( 2011, 3, 1 );
+			Assert.areEqual( '2011-04-30 23:59:59', d.endOfMonth().toString('Y-m-d H:i:s') );
+			var d = new Date(); // 2011年5月は31まで
+			d.setFullYear( 2011, 4, 1 );
+			Assert.areEqual( '2011-05-31 23:59:59', d.endOfMonth().toString('Y-m-d H:i:s') );
+			var d = new Date(); // 2011年2月は28日まで
+			d.setFullYear( 2011, 1, 1 );
+			Assert.areEqual( '2011-02-28 23:59:59', d.endOfMonth().toString('Y-m-d H:i:s') );
+			var d = new Date(); // 2012年2月は閏年なので29日まで
+			d.setFullYear( 2012, 1, 1 );
+			Assert.areEqual( '2012-02-29 23:59:59', d.endOfMonth().toString('Y-m-d H:i:s') );
+		},
+		// 月の最初を指定する
+		testIsLeap: function() {  
+			var d = new Date();
+			d.setFullYear(2011);
+			Assert.areEqual( false, d.isLeap() );
+			var d = new Date();
+			d.setFullYear(2012);
+			Assert.areEqual( true, d.isLeap() );
+		},
+		testNextMonth: function(){
+			var d = new Date();
+			d.setFullYear( 2011, 2, 1 );
+			d.nextMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-04-01', d.toString('Y-m-d') );
+			
+			var d = new Date();
+			d.setFullYear( 2011, 2, 30 );
+			d.nextMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-04-30', d.toString('Y-m-d') );
+			
+			var d = new Date();
+			d.setFullYear( 2011, 2, 31 );
+			d.nextMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-04-30', d.toString('Y-m-d') );
+		},
+		testPrevMonth: function(){
+			var d = new Date();
+			d.setFullYear( 2011, 2, 1 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-02-01', d.toString('Y-m-d') );
+			// 月末処理
+			var d = new Date();
+			d.setFullYear( 2011, 2, 28 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-02-28', d.toString('Y-m-d') );
+			// 月末処理2
+			var d = new Date();
+			d.setFullYear( 2011, 2, 29 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-02-28', d.toString('Y-m-d') );
+			// 月末処理3
+			var d = new Date();
+			d.setFullYear( 2011, 2, 30 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-02-28', d.toString('Y-m-d') );
+			// 月末処理4
+			var d = new Date();
+			d.setFullYear( 2011, 2, 31 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-02-28', d.toString('Y-m-d') );
+			
+			// 2月 -> 1月
+			var d = new Date();
+			d.setFullYear( 2011, 1, 28 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-01-28', d.toString('Y-m-d') );
+			// 3月 -> 2月
+			var d = new Date();
+			d.setFullYear( 2011, 2, 31 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-02-28', d.toString('Y-m-d') );
+			// 4月 -> 3月
+			var d = new Date();
+			d.setFullYear( 2011, 3, 30 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-03-30', d.toString('Y-m-d') );
+			// 5月 -> 4月
+			var d = new Date();
+			d.setFullYear( 2011, 4, 31 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-04-30', d.toString('Y-m-d') );
+			// 6月 -> 5月
+			var d = new Date();
+			d.setFullYear( 2011, 5, 30 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-05-30', d.toString('Y-m-d') );
+			// 7月 -> 6月
+			var d = new Date();
+			d.setFullYear( 2011, 6, 31 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2011-06-30', d.toString('Y-m-d') );
+			// 1月 -> 12月
+			var d = new Date();
+			d.setFullYear( 2011, 0, 31 );
+			d.prevMonth();
+			Assert.areEqual( new Date().toString('H:i:s'), d.toString('H:i:s') );
+			Assert.areEqual( '2010-12-31', d.toString('Y-m-d') );
+
+			var d = new Date();
+			d.setFullYear( 2011, 2, 31 );
+			d.prevMonth().endOfMonth();
+			Assert.areEqual( '2011-02-28', d.toString('Y-m-d') );
+		}
+	});
+	TestRunner.add(oTest);
+	
+	var coAccessTest = new YAHOO.tool.TestCase({
+		name: "日付フォーマットの変換方法 が正しいか",
+		testSetRow:function(){
+			var row = {
+				id:975,user_id:8,date:"2011-06-20T00:00:00Z",money:200,usecase:"bbb",memo:"",cardtype:0,category:null,
+				updated_at:"2011-06-24T13:45:36Z",created_at:"2011-06-20T04:31:11Z"
+			}
+			var p = tblogTbl.selectPoint;
+			Assert.areEqual( tblogTbl.table.length, 1 );
+			tblogTbl.table[0] = row;
+			Assert.areEqual( tblogTbl.table.length, 1 );
+			var rrow = tblogTbl.setRow( [ 1,2,3 ], 1 );
+			Assert.areEqual( rrow['money'], 2 );
+			Assert.areEqual( rrow['usecase'], 3 );
+		},
+		testSetRow2:function(){
+			var row = {
+				id:975,user_id:8,date:"2011-06-20T00:00:00Z",money:200,usecase:"bbb",memo:"",cardtype:0,category:null,
+				updated_at:"2011-06-24T13:45:36Z",created_at:"2011-06-20T04:31:11Z"
+			}
+			var p = tblogTbl.selectPoint;
+			Assert.areEqual( tblogTbl.table.length, 1 );
+			tblogTbl.table[0] = row;
+			Assert.areEqual( tblogTbl.table.length, 1 );
+			var rrow = tblogTbl.setRow( [ '2010-05-20 00:00:00',2,3,4,5,6 ], 1 );
+			Assert.areEqual( rrow['date'], '2010-05-20 00:00:00' );
+			Assert.areEqual( rrow['money'], 2 );
+			Assert.areEqual( rrow['usecase'], 3 );
+			Assert.areEqual( rrow['memo'], 4 );
+			Assert.areEqual( rrow['cardtype'], 5 );
+		},
+		testCreateRow:function(){
+			var row = tblogTbl.createRowData();
+			Assert.areEqual( 'object', (typeof row) );
+			Assert.areEqual( '', row['memo'] );
+		}
+	});
+	TestRunner.add(coAccessTest);
+	
+	TestRunner.subscribe(TestRunner.TEST_PASS_EVENT, function(data) {
+		console.log(data.testName + " passed.");  
+	});  
+
+	TestRunner.subscribe(TestRunner.TEST_FAIL_EVENT, function(data) {
+		console.error(data.testName + " failed with message: " + data.error.getMessage());
+	});  
+	// テストケースを実行
+	YAHOO.tool.TestRunner.run();
+	// 実行後のテストをクリア
+	YAHOO.tool.TestRunner.clear();
+} );
+
+</script>
+
+<div id="logger"></div>
+
+<br />
+
+</body>
+</html>

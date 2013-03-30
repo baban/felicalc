@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<%= 
+xml = Builder::XmlMarkup.new( :versiont => 1.0, :encoding=>'UTF-8', :standalone=>"yes", :indent=>2 )
+xml.OFX do
+  xml.SIGNONMSGSRSV1 do
+    xml.SONRS do
+      xml.STATUS do |status|
+        status.DTSERVER "#{DateTime.now.strftime("%Y%m%d%H")}[+9:JST]"
+        status.LANGUAGE 'JPN'
+        status.FI do |fi|
+          fi.ORG 'Suica'
+        end
+      end
+    end
+  end
+  xml.BANKMSGSRSV1 do |bankmsgsasv1|
+    bankmsgsasv1.STMTTRNRS do |stmttrnrs|
+      stmttrnrs.TRNUID 0
+      stmttrnrs.STATUS do |status|
+        status.CODE 0
+        status.SEVERITY "INFO"
+      end
+      stmttrnrs.CURDEF "JPY"
+      stmttrnrs.BANKACCTFROM do |bankacctfrom|
+        bankacctfrom.BANKID 0
+        bankacctfrom.BRANCHID 0
+        bankacctfrom.ACCTID '01010212D00EF211'
+        bankacctfrom.ACCTTYPE 'SAVINGS'
+      end
+      stmttrnrs.BANKTRANLIST do |banktranlist|
+        banktranlist.DTSTART @account_books.first.date.strftime("%Y%m%d%H%M%S[+9:JST]")
+        banktranlist.DTEND @account_books.last.date.strftime("%Y%m%d%H%M%S[+9:JST]")
+        @account_books.each_with_index do |bool_col, idx|
+          banktranlist.STMTTRN do |stmtrn|
+            stmtrn.TRNTYPE 'INT'
+            stmtrn.DTPOSTED  bool_col.date.strftime('%Y%m%d%H%M%S[+9:JST]')
+            stmtrn.TRNAMT -1*bool_col.money
+            stmtrn.FITID bool_col.date.strftime("%Y%m%d_%H%M%S_#{idx}")
+            stmtrn.NAME bool_col.usecase
+            stmtrn.MEMO bool_col.memo
+          end
+        end
+      end
+    end
+  end
+end 
+%>

@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+div#statistic-circle-figure {
+	border:solid 1px #000;
+	width:610px;
+	padding:0;
+	clear:none;
+	float:left;
+}
+
+div#statistic-circle-figure > object {
+	margin:0;
+	padding:0;
+}
+
+div#statstic-description {
+	margin-left:2em;
+	clear:none;
+	float:left;
+}
+
+table#statistic-table td {
+	text-align:right;
+}
+
+table#statistic-table {
+	border-collapse:collapse;
+}

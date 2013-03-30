@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+div#header {
+  background-color:#8e05ce;
+  background-repeat:no-repeat;
+  
+  color:white;
+  width:100%;
+  min-height:92px;
+  margin:0 0 0.5em 0;
+  padding:0 0 0.5em 0;
+  a {
+    color:white;
+  }
+  h1 {
+    width:203px;
+    height:68px;
+    margin:0;
+    padding:0;
+    float:left;
+  }
+  h1 > a {
+    background-image:url("../img/titie-logo.png");
+    display:block;
+    float:left;
+    width:203px;
+    height:68px;
+    color:transparent;
+    margin:0 0.5em;
+  }
+}
+
+dl#menu {
+  border-style:solid none none none;
+  border-width:2px;
+  border-color:#ddaae3;
+  margin:0 0 0.4em 0;
+}
+
+dl#menu > dt {
+  position:relative;
+  clear:none;
+  width:8em;
+  float:left;
+  padding:0.1em 0.1em 0.1em 0.5em;
+  margin:0;
+  border-style:none none none solid;
+  border-width:0.1em;
+  border-color:white;
+}
+
+dl#menu > dt:first-child {
+  border-style:none;
+}
+
+dl#menu > dt:hover {
+  background-color:#b561b5;
+}
+
+dl.menu-item {
+  position:relative;
+  clear:none;
+  width:8em;
+  float:left;
+  padding:0;
+  margin:0;
+}
+
+dl.menu-item > dt.menu-item {
+  margin:0;
+  padding:0;
+}
+
+dl.menu-item > dd.menu-item {
+  position:absolute;
+  display:none;
+}
+
+dl.menu-item:hover > dt.menu-item {
+  text-decoration:underline;
+}
+
+dl.menu-item:hover > dd.menu-item {
+  background-color:#556eb4;
+  z-index:+5;
+  display:block;
+  margin:0;
+  padding:0;
+}
+
+dd.menu-item > dl.menu-item {
+  margin:0.1em 0.5em 0.3em 0.5em;
+  width:12em;
+}
+
+dd.menu-item > dl.menu-item > dt.menu-item {
+  display:block;
+  margin:0.3em 0 0.3em 0;
+}
+
+#login-bar {
+  text-align:right;
+  font-size:0.9em;
+  text-align:right;
+  float:right;
+  clear:none;
+  display:block;
+  margin:0 0.5em 0.1em 300px;
+  padding:0.3em 0.2em 0 0;
+  height:20px;
+  form {
+    background-color:transparent;
+    border-style:none;
+    text-decoration:underline;
+    width:auto;
+    display:inline;
+    input { 
+      color:white;
+      background-color:transparent;
+      border-style:none;
+      display:inline;
+    }
+  }
+}
+

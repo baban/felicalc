@@ -1,0 +1,53 @@
+<!-- Applications list with models. -->
+
+<%
+  page_title = Typus::I18n.t("Applications")
+%>
+
+<%
+  applications = admin_user.applications
+
+  # Detect if we are inside an application.
+  if (application = params[:application])
+    applications.each do |app|
+      if app.parameterize == application
+        applications = [app]
+      end
+    end
+    page_title = applications.first
+  end
+%>
+
+<h2><%= page_title %></h2>
+
+<% if applications.any? %>
+  <% applications.each do |app| %>
+
+    <table style="margin-bottom: 1em;">
+
+      <% table_header = application ? "Models" : app %>
+
+      <thead>
+        <tr>
+          <th><%= Typus::I18n.t(table_header) %></th>
+        </tr>
+      </thead>
+
+      <% admin_user.application(app).map(&:constantize).each do |klass| %>
+        <% if klass.typus_options_for(:hide_from_dashboard) == false %>
+          <tr class="<%= cycle("even", "odd") %>">
+            <td>
+              <%= link_to klass.model_name.human, :controller => "/admin/#{klass.to_resource}" %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+
+    </table>
+
+  <% end %>
+<% else %>
+  <div class="notice">
+    No applications detected.
+  </div>
+<% end %>

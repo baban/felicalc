@@ -1,0 +1,26 @@
+<% unless @changed %>
+  <h1>Change account email address - Step 1 of 3</h1> 
+  <p>Enter the new email address that you wish to use for this account</p>
+  <br/>
+  <% form_for :user, :url => change_email_path do |f| -%>
+  <%= error_messages_for :user %>
+
+    <p><label for="email">Email</label><br/>
+    <%= f.text_field :email %></p>
+
+    <p><label for="password">Password</label><br/>
+    <%= f.password_field :password %></p>
+
+    <p><%= submit_tag 'Update email' %></p>
+
+  <% end -%>
+<% else -%>
+  <h1>Change account email address - Step 2 of 3</h1>
+  <p>
+    Thanks. An email has been sent to the address provided (<%= @email.email %>).
+  </p>
+  <p>
+    Please follow the instructions contained within the email to complete this process.
+  </p>
+<% end -%>
+

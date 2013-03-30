@@ -1,0 +1,78 @@
+@charset "Shift_JIS";
+
+/** 
+リンクページに関するデザイン設定を行います。
+*/
+
+@import url("def/html-default-css1.css");
+@import "def/html-default-css2.css" all;
+@import url("def/html-color-base.css");
+@import url("base-style.css");
+@import url("pattern/banner-title.css");
+
+body {
+	background-color:#EFE3D2;
+}
+
+body > h1:first-child{
+	background-image:url("img/link-title-back.gif");
+	background-position:90% 70%;
+}
+
+dl, ul {
+	margin:0 1.5em;
+}
+
+li:before,
+dt:before,
+span.admin,
+span.dead_reason {
+	color:#1c3428;
+}
+
+h2 {
+	border-color:#aaa;
+	padding-top:0.5em;
+	border-bottom-style:double;
+	border-width:3px;
+	color:#888;
+	padding-left:0.5em;
+}
+
+h2:before {
+	content:"";
+}
+
+dt.link > a {
+	font-weight:600;
+	text-decoration:none;
+	line-height:1.0;
+}
+
+li.link:before,
+dt.link:before {
+	vertical-align:middle;
+}
+
+dt.link + dd {
+	padding-top:0.2em;
+	margin-bottom:0.5em;
+	margin-left:1.0em;
+}
+
+span.admin {
+	font:700 1.0em monospace;
+	padding:0 0.5em;
+}
+
+span.admin:before{
+	content:" : <";
+}
+span.admin:after {
+	content:">";
+}
+
+dt.link, dd {
+	margin:0 0.3em;
+	padding:0;
+}

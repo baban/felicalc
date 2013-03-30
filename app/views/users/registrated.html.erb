@@ -1,0 +1,11 @@
+<% content_for :menu_list do %>
+  <dt id="account_books-page"><%= link_to "帳簿", account_books_path %></dt>
+  <dt id="statistic-page">
+    <%=link_to "統計", { controller:"account_statistics", action:"index", day:"#{Time.now.at_beginning_of_month.strftime('%Y%m%d')}-#{Time.now.at_end_of_month.strftime('%Y%m%d')}" }, id:"statistic-link" %>
+  </dt>
+  <!-- <dt id="property-page">設定</dt> -->
+<% end %>
+
+<h2>登録完了</h2>
+
+<%=link_to "TOPへ", root_url %>

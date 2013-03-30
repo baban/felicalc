@@ -1,0 +1,23 @@
+<div class="actions">
+  <div class="left">
+    <ul>
+      <li><%= link_to Typus::I18n.t("All"), params.dup.cleanup.merge(:action => 'index') %> (<%= resource.count %>)</li>
+      <% predefined_filters.each do |filter, action, scope| %>
+        <% url = action.is_a?(String) ? params.dup.cleanup.merge(:action => action) : action %>
+        <li><%= link_to Typus::I18n.t(filter), url %> <%= "(#{@resource.send(scope).count})" if scope && @resource.respond_to?(scope) %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="right">
+    <% unless resource.count.zero? %>
+      <ul>
+        <li><%= Typus::I18n.t("Export as") %></li>
+        <ul>
+          <li><%= link_to "CSV", :format => 'csv' %></li>
+          <li><%= link_to "XML", :format => 'xml' %></li>
+        </ul>
+      </ul>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<%
+  page_title = Typus::I18n.t("Edit %{resource}", :resource => @resource.model_name.human)
+  title(page_title)
+%>
+
+<% content_for :main_grid do %>
+  <h2>
+    <%= page_title %>
+    <small><%= list_actions %></small>
+  </h2>
+
+  <% if headless_mode? && params[:action] == 'edit' && flash.keys.include?(:notice) && !params[:_input] %>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        <% if params[:attribute] %>
+          var option = new Option("<%= @item.to_label %>", "<%= @item.id %>", true, true);
+          parent.$("#<%= params[:attribute] %>").append(option);
+          parent.$(".chzn-select-<%= params[:attribute] %>").trigger("liszt:updated");
+        <% else %>
+          parent.Typus.parent_location_reload = true;
+        <% end %>
+        parent.$.fancybox.close();
+      });
+    </script>
+  <% end %>
+
+  <%= display_flash_message %>
+  <%= render 'edit' %>
+
+  <% locals = { :options => params.dup.cleanup.merge!(:action => 'update') } %>
+  <%= render 'form', locals %>
+
+  <%= typus_relationships unless headless_mode? %>
+<% end %>
+
+<div class="grid_2">
+  <%= build_sidebar || render("admin/templates/profile_sidebar") %>
+</div>
+
+<div class="grid_8">
+  <%= yield :main_grid %>
+</div>
