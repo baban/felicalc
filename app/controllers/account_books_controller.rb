@@ -4,40 +4,10 @@ class AccountBooksController < ApplicationController
   # コンテンツ
   def index
   end
-  
-  # １件表示
-  def show
-    @account_book = AccountBook.find(params[:id])
-  end
-  
-  # 新規登録
-  def new
-    @account_book = AccountBook.new
-  end
-  
-  # 編集
-  def edit
-    @account_book = AccountBook.find(params[:id])
-  end
-  
-  # 作成
-  def create
-    @account_book = AccountBook.new(params[:account_book])
     
-    respond_to do |format|
-      if @account_book.save
-        flash[:notice] = '1件登録完了!'
-        format.html { redirect_to(@account_book) }
-      else
-        format.html { render :action => "new" }
-      end
-    end
-  end
-  
   # 指定された条件の列をすべて取り出して、jsonで返す
   def get_row
     @account_books = AccountBook.where( user_id: current_user.id ).where( params[:conditions] ).to_a
-    
     respond_to { |fmt| fmt.json { render :json => @account_books } }
   end
   
@@ -45,7 +15,6 @@ class AccountBooksController < ApplicationController
   def update_row
     tprms = params
     @account_book = AccountBook.update_row( current_user.id, tprms )
-    logger.info @account_book.inspect
     respond_to {|fmt| fmt.json { render :json => @account_book } }
   end
   
