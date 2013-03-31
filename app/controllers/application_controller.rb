@@ -19,6 +19,6 @@ class ApplicationController < ActionController::Base
   end
 
   def member_filter
-    return redirect_to "/user/sign_in" unless login?
+    return redirect_to new_user_session_url unless login?
   end
 end
