@@ -40,5 +40,4 @@ JpFullstack::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
->>>>>>> a6a2b0c510c1c0566db4e77a449b15a1921911c3
 end
