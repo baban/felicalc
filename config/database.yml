@@ -16,7 +16,6 @@ production:
   adapter: mysql2
   database: felicalc
   username: root
-  password: root
   host: localhost
 
 
