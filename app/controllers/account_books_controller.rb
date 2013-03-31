@@ -7,7 +7,10 @@ class AccountBooksController < ApplicationController
     
   # 指定された条件の列をすべて取り出して、jsonで返す
   def get_row
+    logger.info :current_user
+    logger.info current_user.inspect
     @account_books = AccountBook.where( user_id: current_user.id ).where( params[:conditions] ).to_a
+    logger.info @account_books.inspect
     respond_to { |fmt| fmt.json { render :json => @account_books } }
   end
   
