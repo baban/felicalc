@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class AccountBooksController < ApplicationController
+  before_filter :member_filter
+
   # コンテンツ
   def index
   end

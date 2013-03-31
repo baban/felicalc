@@ -16,10 +16,16 @@ body > h1 {
   margin:0 0.5em 1em 0.5em;
 }
 
+#error_explanation {
+  color:red;
+}
+
 .alert {
   color:red;
+  text-align:center;
 }
 
 .notice {
   color:green;
+  text-align:center;
 }
